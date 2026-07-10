@@ -17,6 +17,11 @@ output/*.pt
 output/*.png
 output/*.pdf
 
+# Artefactos de EconDLSolvers
+solving.json
+convergence.txt
+convergence.png
+
 # Sistema
 .DS_Store
 nohup.out
