@@ -1,0 +1,248 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage[margin=2.6cm]{geometry}
+\usepackage{hyperref}
+
+\newtheorem{assumption}{Supuesto}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\ind}[1]{\mathbf{1}\{#1\}}
+
+\title{Un modelo estocástico de las cotizaciones previsionales chilenas\\
+\large Nota metodológica — borrador para discusión}
+\author{Carlos Pérez G.\thanks{Universidad Andrés Bello. Borrador; no citar.}}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Objetivo y hechos estilizados}
+
+Esta nota especifica un proceso estocástico para la historia de cotizaciones
+obligatorias de un afiliado al sistema de pensiones chileno, estimable con la
+muestra de Historias Previsionales de Afiliados (HPA) de la Superintendencia
+de Pensiones. El proceso está diseñado para servir como insumo exógeno de un
+modelo de ciclo de vida de inversión previsional, por lo que se privilegia una
+representación markoviana explícita.
+
+La especificación responde a cuatro hechos documentados en la muestra HPA
+(panel persona--mes 1981--2023, $N=28.524$ individuos, 7,5 millones de
+observaciones):
+
+\begin{enumerate}
+\item \textbf{Densidad intermedia y dispersa.} La densidad de cotización
+agregada es 0,535. La distribución de densidades individuales de vida es
+fuertemente bimodal (en forma de U): 15,5\% de los afiliados presenta densidad
+inferior a 0,10 y 16,5\% superior a 0,90.
+\item \textbf{Heterogeneidad de niveles.} Clasificando por terciles de
+densidad, la probabilidad mensual de reingreso desde una laguna varía en un
+factor de 8 entre grupos (0,023 vs.\ 0,178) y la persistencia mensual en
+cotización va de 0,837 a 0,977.
+\item \textbf{Dependencia de duración genuina.} Los hazards de salida de
+ambos estados decrecen fuertemente con la duración del episodio
+\emph{dentro de cada grupo de adhesión} (razón entre el hazard a 1--3 meses y
+a 19--24 meses de entre 4 y 8), y se aplanan pasados 15--20 meses. La
+dependencia de duración no es, por tanto, un artefacto de composición,
+aunque la heterogeneidad también es de primer orden.
+\item \textbf{Ausencia de \emph{scarring} salarial.} El salario real de
+reingreso tras una laguna no muestra penalización respecto del salario
+pre-laguna, una vez ajustado por el crecimiento salarial contrafactual de los
+cotizantes continuos. La laguna destruye cotizaciones, no salario observado
+de reentrada.
+\end{enumerate}
+
+Los hechos 2 y 3 excluyen tanto un proceso de Markov homogéneo de dos estados
+(sin memoria de duración) como una explicación puramente composicional. El
+modelo combina, en consecuencia, \emph{tipos discretos} y
+\emph{semi-Markov con dependencia de duración truncada}.
+
+\section{El proceso de participación}
+
+\subsection{Estados, tipos y notación}
+
+El tiempo es discreto y mensual, $t = 1, 2, \dots$; el individuo $i$ entra al
+sistema en el mes de su afiliación y se caracteriza por su sexo $g_i$ y un
+\emph{tipo} permanente $k_i \in \{1,\dots,K\}$ con probabilidades
+poblacionales $\pi_k$. El estado de participación es
+\[
+s_{it} \in \{0,1\}, \qquad 1 = \text{cotiza}, \quad 0 = \text{laguna},
+\]
+y la duración en el estado corriente, truncada en $\bar D$ meses, es
+\[
+d_{it} = \min\bigl\{\#\{\tau \le t : s_{i\tau} = s_{it} \ \forall \tau' \in
+[\tau, t]\},\ \bar D\bigr\}.
+\]
+El truncamiento se justifica empíricamente por el aplanamiento de los hazards
+(hecho 3); como referencia inicial, $\bar D = 24$.
+
+\subsection{Hazards de transición}
+
+Las transiciones entre estados están gobernadas por hazards en tiempo
+discreto que dependen del tipo, la duración, la edad $a_{it}$ y el sexo:
+\begin{align}
+\lambda^{01}_{k}(d, a, g) &= \Prob\left(s_{i,t+1} = 1 \mid s_{it} = 0,\
+d_{it} = d,\ a_{it} = a,\ g_i = g,\ k_i = k\right), \\
+\lambda^{10}_{k}(d, a, g) &= \Prob\left(s_{i,t+1} = 0 \mid s_{it} = 1,\
+d_{it} = d,\ a_{it} = a,\ g_i = g,\ k_i = k\right).
+\end{align}
+Se especifican como logits:
+\begin{equation}
+\lambda^{sr}_{k}(d, a, g) = \Lambda\bigl(\alpha^{sr}_{k} + f^{sr}_k(d) +
+h^{sr}(a) + \gamma^{sr} g\bigr), \qquad \Lambda(x) = \frac{e^x}{1+e^x},
+\label{eq:logit}
+\end{equation}
+donde $f^{sr}_k(\cdot)$ es una función escalonada o spline de la duración
+(constante para $d \ge \bar D$) y $h^{sr}(\cdot)$ un polinomio o spline en
+edad. La interacción completa tipo$\times$duración en $f^{sr}_k$ es el objeto
+central: capturar cuánta memoria de duración sobrevive dentro de tipo.
+
+\begin{assumption}[Exogeneidad del proceso de participación]
+\label{as:exo}
+$\{s_{it}\}$ es exógeno respecto de las decisiones de inversión del fondo y
+de la política de carteras de referencia.
+\end{assumption}
+
+El Supuesto~\ref{as:exo} es estándar en la literatura de ciclo de vida
+(participación laboral no responde a la rentabilidad del ahorro forzoso) y
+es, si acaso, conservador para nuestro propósito de política.
+
+\subsection{Representación markoviana en el estado ampliado}
+
+Definiendo el estado ampliado $x_{it} = (s_{it}, d_{it}) \in \mathcal{X}$ con
+$|\mathcal{X}| = 2\bar D$, el proceso es Markov de primer orden condicional a
+$(k, a, g)$, con kernel
+\begin{equation}
+P_{k,a,g}\bigl((s,d) \to (s', d')\bigr) =
+\begin{cases}
+\lambda^{s\,(1-s)}_k(d,a,g) & \text{si } s' = 1-s,\ d' = 1,\\[2pt]
+1 - \lambda^{s\,(1-s)}_k(d,a,g) & \text{si } s' = s,\ d' = \min\{d+1,\bar D\},\\[2pt]
+0 & \text{en otro caso.}
+\end{cases}
+\label{eq:kernel}
+\end{equation}
+Esta representación es la que ingresa al modelo de programación dinámica: el
+costo de la memoria de duración es lineal en $\bar D$, no exponencial.
+
+\subsection{Condiciones iniciales}
+
+A la edad de entrada $a_0$ (afiliación), el individuo extrae
+$x_{i,0} = (s_0, 1)$ con $\Prob(s_0 = 1 \mid k, g)$ estimada de la
+distribución empírica del primer año post-afiliación. Las proporciones de
+tipos $\pi_k$ y su composición por sexo se estiman en la clasificación
+(Sección~\ref{sec:estimacion}).
+
+\section{El proceso de remuneraciones}
+
+\subsection{Especificación}
+
+Toda remuneración se expresa en UF (unidades de fomento) del mes
+correspondiente, de modo que el proceso está en términos reales por
+construcción. Condicional a cotizar ($s_{it}=1$), la remuneración imponible
+observada es
+\begin{equation}
+w^{obs}_{it} = \min\{w_{it},\ \bar w_t\}, \qquad
+\log w_{it} = m_k(a_{it}) + \zeta_{ig} + z_{it} + \varepsilon_{it},
+\label{eq:wage}
+\end{equation}
+donde $\bar w_t$ es el tope imponible vigente (censura observable, con
+indicador administrativo en los datos), $m_k(\cdot)$ es el perfil
+edad--ingreso por tipo, $\zeta_{ig}$ un efecto fijo individual con media
+dependiente del sexo, $z_{it}$ el componente persistente y
+$\varepsilon_{it}$ ruido transitorio (que incluye error de medición y
+fracción de mes trabajada):
+\begin{equation}
+z_{it} = \rho\, z_{i,t-1} + \eta_{it}, \qquad
+\eta_{it} \sim iid\,(0, \sigma^2_{\eta,k}), \qquad
+\varepsilon_{it} \sim iid\,(0, \sigma^2_{\varepsilon,k}).
+\end{equation}
+
+\begin{assumption}[Neutralidad salarial de las lagunas]
+\label{as:noscar}
+El componente persistente $z_{it}$ evoluciona en tiempo calendario con la
+misma ley de movimiento durante episodios de cotización y de laguna; la
+remuneración es simplemente no observada cuando $s_{it}=0$.
+\end{assumption}
+
+El Supuesto~\ref{as:noscar} está respaldado por el hecho estilizado 4: el
+salario mediano de reingreso, deflactado y neto del crecimiento contrafactual,
+no exhibe penalización por duración de la laguna (las estimaciones puntuales
+son levemente positivas, consistentes con selección en el reingreso). Esto
+contrasta con la práctica de imponer depreciación de capital humano durante
+las interrupciones y simplifica el estado del modelo: no se requiere
+arrastrar la duración acumulada de lagunas como determinante salarial.
+
+\subsection{Cotización}
+
+La cotización mensual al fondo es
+\begin{equation}
+c_{it} = \tau_t \cdot \min\{w_{it}, \bar w_t\} \cdot s_{it},
+\end{equation}
+con $\tau_t$ la tasa legal vigente (10\% histórico; trayectoria creciente
+según la Ley 21.735 para el aporte con destino a cuenta individual). Tanto
+$\tau_t$ como $\bar w_t$ son parámetros institucionales deterministas, no
+objetos estocásticos.
+
+\section{Estimación}
+\label{sec:estimacion}
+
+La estrategia tiene cuatro pasos:
+
+\paragraph{Paso 1: clasificación de tipos.} Referencia base: $K=3$, con
+asignación por terciles de la densidad individual (edades 20--65, mínimo 60
+meses de historia potencial). Robustez: (i) clasificación con la densidad de
+los primeros 60 meses y estimación con el resto de la muestra, para evitar
+estratificación endógena; (ii) $K=2$ y $K=4$; (iii) como extensión, mixture
+de verosimilitud completa tipo EM en que $\pi_k$ y los hazards se estiman
+conjuntamente (Heckman--Singer), dejando la clasificación dura como caso
+particular.
+
+\paragraph{Paso 2: hazards.} Logits \eqref{eq:logit} por tipo y estado de
+origen, con dummies de duración $\{1,\dots,12\}$, agrupación 13--18, 19--24 y
+$\ge \bar D$, spline cúbico en edad y dummy de sexo. Ponderación igual por
+observación persona--mes; errores estándar agrupados por individuo.
+
+\paragraph{Paso 3: remuneraciones.} Con la submuestra $s_{it}=1$ y
+excluyendo observaciones en el tope ($\approx$ flag administrativo): (i)
+$m_k(a)$ y $\zeta_{ig}$ por regresión con efectos fijos individuales sobre
+splines de edad, por tipo; (ii) $\rho$, $\sigma^2_{\eta,k}$ y
+$\sigma^2_{\varepsilon,k}$ por GMM sobre autocovarianzas de los residuos en
+frecuencia anual (promedio de meses cotizados del año), siguiendo la práctica
+estándar para separar componente persistente y transitorio. La censura por
+tope se trata por máxima verosimilitud tobit como robustez.
+
+\paragraph{Paso 4: validación por momentos no utilizados.} El proceso
+estimado se simula (mensualmente, desde la edad de afiliación) y se contrasta
+con momentos \emph{no} usados en la estimación:
+distribución completa de densidades individuales (la forma de U),
+distribución de duración de lagunas completadas, densidad por edad y sexo,
+número de episodios de laguna por individuo a los 60 años, y autocorrelación
+de la densidad anual. La agregación mensual$\to$anual para el modelo de
+ciclo de vida se efectúa sobre estas mismas simulaciones, eligiendo la
+representación anual más parsimoniosa que preserve los momentos relevantes
+para la acumulación de saldo.
+
+\section{Limitaciones y decisiones abiertas}
+
+\begin{enumerate}
+\item \textbf{Muestra.} La HPA proviene de la muestra teórica de la EPS;
+sobrerrepresenta cohortes antiguas y no incluye trabajadores nunca afiliados.
+El ``chileno mediano'' del producto 2 se definirá sobre la población
+\emph{afiliada}, que es la relevante para el glide path.
+\item \textbf{Estacionalidad.} Ambos hazards exhiben un máximo local en
+duraciones de 9--11 meses (contratos anuales, trabajo estacional). Las
+dummies de duración lo absorben; no se modela estructuralmente.
+\item \textbf{Identificación duración vs.\ heterogeneidad residual.} Dentro
+de tipo puede persistir heterogeneidad; la lectura causal de $f^{sr}_k$ no es
+necesaria para nuestro propósito (simulación de trayectorias), pero sí lo es
+para interpretaciones estructurales, y así se declarará.
+\item \textbf{Edad de término.} El panel se censura en la solicitud de
+pensión o los 65 años; la extensión post-65 (relevante para el Fondo de
+Consolidación) requerirá supuestos adicionales.
+\item \textbf{Pendiente.} Elección final de $K$, $\bar D$ y la frecuencia
+del modelo de ciclo de vida (mensual vs.\ anual con proceso agregado).
+\end{enumerate}
+
+\end{document}
