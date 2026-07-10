@@ -2,8 +2,17 @@
 
 ## 1. Pregunta de investigación
 
-[¿Qué se quiere responder? ¿Problema del individuo, del regulador (glide path
-de fondos generacionales), o de la AFP?]
+Problema del regulador: glide path de los fondos generacionales (consulta
+pública RX 910, plazo 31-jul-2026). Dos productos:
+
+- **P1**: proceso estocástico de cotizaciones chilenas estimado con la muestra
+  HPA. Especificación completa en `modelo_cotizaciones.tex`.
+- **P2**: glide path óptimo de un modelo de ciclo de vida con lagunas y PGU.
+  Diseño del objetivo: descomposición en dos brechas — óptimo por tipo×sexo
+  (cota superior, no implementable por diseño agrupado de los fondos) vs.
+  mejor path uniforme bajo ponderadores explícitos vs. path propuesto por la
+  SP. Detalle y justificación en `bitacora.md` (sesión 1). Agente central para
+  reportes: densidad a ventana fija, no densidad de panel censurada.
 
 ## 2. Problema de optimización
 

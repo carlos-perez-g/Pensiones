@@ -113,6 +113,51 @@ benchmark del propuesto. Ambos alimentan un comentario a la consulta pública.
 - Entorno listo: EconDLSolvers instalado y verificado (test SimpleConSav OK, CPU).
   Sandbox sin GPU; corridas largas → Mac local o runpod (ver notes/setup.md).
 
+### Diseño del objetivo de política P2 (decidido 2026-07-10, sesión 1)
+
+**Problema planteado**: ¿para quién se optimiza el glide path? El "chileno
+mediano" es frágil (distribución de densidad bimodal: casi nadie está en la
+mediana); excluir a los de baja adhesión de la muestra sería arbitrario; y los
+glide paths por tipo no son política implementable (Carlos): el tipo no es
+identificable ex ante y — restricción vinculante — los fondos generacionales son
+carteras AGRUPADAS por cohorte: un solo portafolio por fondo, imposible
+condicionar en nada distinto de la edad aunque el tipo se revele con la historia
+(que se revela: la clasificación por ventana temprana predice comportamiento
+posterior; a los 45 el posterior de tipo está casi degenerado).
+
+**Diseño adoptado — descomposición en dos brechas**:
+
+    (W_tipo − W_unif*)  +  (W_unif* − W_SP)
+     costo del diseño       pérdida evitable
+     agrupado (no imple-    dentro del diseño
+     mentable; cota sup.)   actual (accionable)
+
+1. Resolver el óptimo por tipo×sexo (6 soluciones DP). Rol: cota superior de
+   bienestar y diagnóstico, NO propuesta de política.
+2. Calcular el mejor path UNIFORME bajo ponderadores explícitos del
+   planificador: por afiliado, por peso administrado, y excluyendo al tipo de
+   adhesión mínima (robustez). La elección de ponderadores queda ABIERTA y se
+   reporta sensibilidad.
+3. Evaluar el path de la SP contra ambos.
+
+**Uso**: el comentario a la consulta usa la segunda brecha (consumo equivalente
+perdido dentro del marco legal vigente). El paper académico reporta además la
+primera: el costo de bienestar del diseño agrupado en un país con esta
+heterogeneidad de adhesión (número no calculado antes para Chile).
+
+**Notas**: (i) para P1 NO se elimina a nadie de la muestra — los de baja
+densidad son un tercio de los datos y el marco de tipos los acomoda; el
+ponderador cero es una elección del objetivo del planificador, no una decisión
+muestral; (ii) "cotiza poco" ≠ "el glide path no le afecta": sus pesos transitan
+el path completo; lo que es pequeño es el nivel de su saldo relativo a la PGU;
+(iii) la definición operativa del agente central para reportes usará densidad a
+ventana fija (p.ej. 25-60) o trayectorias simuladas, no la densidad de panel
+censurada (sensible a carreras cortas: un afiliado de 25 años con 5 años
+cotizados figura 100%; verificado que la cola alta NO está dominada por este
+artefacto: mediana 22 años de historia, solo 10,8% con <10 años); (iv) el
+ahorro voluntario permite elegir fondo generacional (auto-selección residual);
+de segundo orden, no usar como argumento.
+
 ### Advertencias metodológicas vigentes
 
 - Muestra HPA = muestra teórica EPS: sobrerrepresenta cohortes antiguas; solo
