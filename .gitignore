@@ -9,6 +9,8 @@ __pycache__/
 
 # Datos crudos grandes (versionar solo scripts que los descargan/procesan)
 calibration/data/raw/
+data/
+Data/
 
 # Outputs pesados y modelos entrenados
 output/*.pt
