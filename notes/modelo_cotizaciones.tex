@@ -66,7 +66,13 @@ modelo combina, en consecuencia, \emph{tipos discretos} y
 El tiempo es discreto y mensual, $t = 1, 2, \dots$; el individuo $i$ entra al
 sistema en el mes de su afiliación y se caracteriza por su sexo $g_i$ y un
 \emph{tipo} permanente $k_i \in \{1,\dots,K\}$ con probabilidades
-poblacionales $\pi_k$. El estado de participación es
+poblacionales $\pi_{k|g}$ \emph{condicionales al sexo}. Todo el modelo se
+especifica y estima separadamente por sexo: las brechas observadas (densidad
+mediana de vida de 0,644 en hombres vs.\ 0,457 en mujeres; brecha de densidad
+por edad creciente de 12 a 20 puntos porcentuales entre los 25 y los 64
+años) y las asimetrías institucionales (edades legales de retiro, tablas de
+mortalidad) hacen inadecuada una especificación unisex con desplazamientos
+aditivos. El estado de participación es
 \[
 s_{it} \in \{0,1\}, \qquad 1 = \text{cotiza}, \quad 0 = \text{laguna},
 \]
@@ -81,23 +87,24 @@ El truncamiento se justifica empíricamente por el aplanamiento de los hazards
 \subsection{Hazards de transición}
 
 Las transiciones entre estados están gobernadas por hazards en tiempo
-discreto que dependen del tipo, la duración, la edad $a_{it}$ y el sexo:
+discreto que dependen del tipo, la duración y la edad $a_{it}$, con todos los
+parámetros específicos al sexo:
 \begin{align}
-\lambda^{01}_{k}(d, a, g) &= \Prob\left(s_{i,t+1} = 1 \mid s_{it} = 0,\
-d_{it} = d,\ a_{it} = a,\ g_i = g,\ k_i = k\right), \\
-\lambda^{10}_{k}(d, a, g) &= \Prob\left(s_{i,t+1} = 0 \mid s_{it} = 1,\
-d_{it} = d,\ a_{it} = a,\ g_i = g,\ k_i = k\right).
+\lambda^{01}_{k,g}(d, a) &= \Prob\left(s_{i,t+1} = 1 \mid s_{it} = 0,\
+d_{it} = d,\ a_{it} = a,\ k_i = k,\ g_i = g\right), \\
+\lambda^{10}_{k,g}(d, a) &= \Prob\left(s_{i,t+1} = 0 \mid s_{it} = 1,\
+d_{it} = d,\ a_{it} = a,\ k_i = k,\ g_i = g\right).
 \end{align}
 Se especifican como logits:
 \begin{equation}
-\lambda^{sr}_{k}(d, a, g) = \Lambda\bigl(\alpha^{sr}_{k} + f^{sr}_k(d) +
-h^{sr}(a) + \gamma^{sr} g\bigr), \qquad \Lambda(x) = \frac{e^x}{1+e^x},
+\lambda^{sr}_{k,g}(d, a) = \Lambda\bigl(\alpha^{sr}_{k,g} + f^{sr}_{k,g}(d) +
+h^{sr}_{g}(a)\bigr), \qquad \Lambda(x) = \frac{e^x}{1+e^x},
 \label{eq:logit}
 \end{equation}
-donde $f^{sr}_k(\cdot)$ es una función escalonada o spline de la duración
-(constante para $d \ge \bar D$) y $h^{sr}(\cdot)$ un polinomio o spline en
-edad. La interacción completa tipo$\times$duración en $f^{sr}_k$ es el objeto
-central: capturar cuánta memoria de duración sobrevive dentro de tipo.
+donde $f^{sr}_{k,g}(\cdot)$ es una función escalonada o spline de la duración
+(constante para $d \ge \bar D$) y $h^{sr}_{g}(\cdot)$ un polinomio o spline en
+edad. La interacción completa tipo$\times$duración en $f^{sr}_{k,g}$ es el
+objeto central: capturar cuánta memoria de duración sobrevive dentro de tipo.
 
 \begin{assumption}[Exogeneidad del proceso de participación]
 \label{as:exo}
@@ -115,10 +122,10 @@ Definiendo el estado ampliado $x_{it} = (s_{it}, d_{it}) \in \mathcal{X}$ con
 $|\mathcal{X}| = 2\bar D$, el proceso es Markov de primer orden condicional a
 $(k, a, g)$, con kernel
 \begin{equation}
-P_{k,a,g}\bigl((s,d) \to (s', d')\bigr) =
+P_{k,g,a}\bigl((s,d) \to (s', d')\bigr) =
 \begin{cases}
-\lambda^{s\,(1-s)}_k(d,a,g) & \text{si } s' = 1-s,\ d' = 1,\\[2pt]
-1 - \lambda^{s\,(1-s)}_k(d,a,g) & \text{si } s' = s,\ d' = \min\{d+1,\bar D\},\\[2pt]
+\lambda^{s\,(1-s)}_{k,g}(d,a) & \text{si } s' = 1-s,\ d' = 1,\\[2pt]
+1 - \lambda^{s\,(1-s)}_{k,g}(d,a) & \text{si } s' = s,\ d' = \min\{d+1,\bar D\},\\[2pt]
 0 & \text{en otro caso.}
 \end{cases}
 \label{eq:kernel}
@@ -131,7 +138,7 @@ costo de la memoria de duración es lineal en $\bar D$, no exponencial.
 A la edad de entrada $a_0$ (afiliación), el individuo extrae
 $x_{i,0} = (s_0, 1)$ con $\Prob(s_0 = 1 \mid k, g)$ estimada de la
 distribución empírica del primer año post-afiliación. Las proporciones de
-tipos $\pi_k$ y su composición por sexo se estiman en la clasificación
+tipos por sexo $\pi_{k|g}$ se estiman en la clasificación
 (Sección~\ref{sec:estimacion}).
 
 \section{El proceso de remuneraciones}
@@ -144,13 +151,13 @@ construcción. Condicional a cotizar ($s_{it}=1$), la remuneración imponible
 observada es
 \begin{equation}
 w^{obs}_{it} = \min\{w_{it},\ \bar w_t\}, \qquad
-\log w_{it} = m_k(a_{it}) + \zeta_{ig} + z_{it} + \varepsilon_{it},
+\log w_{it} = m_{k,g}(a_{it}) + \zeta_{i} + z_{it} + \varepsilon_{it},
 \label{eq:wage}
 \end{equation}
 donde $\bar w_t$ es el tope imponible vigente (censura observable, con
-indicador administrativo en los datos), $m_k(\cdot)$ es el perfil
-edad--ingreso por tipo, $\zeta_{ig}$ un efecto fijo individual con media
-dependiente del sexo, $z_{it}$ el componente persistente y
+indicador administrativo en los datos), $m_{k,g}(\cdot)$ es el perfil
+edad--ingreso por tipo y sexo, $\zeta_{i}$ un efecto fijo individual,
+$z_{it}$ el componente persistente y
 $\varepsilon_{it}$ ruido transitorio (que incluye error de medición y
 fracción de mes trabajada):
 \begin{equation}
@@ -188,11 +195,12 @@ objetos estocásticos.
 \section{Estimación}
 \label{sec:estimacion}
 
-La estrategia tiene cuatro pasos:
+Toda la estimación se realiza separadamente por sexo. La estrategia tiene
+cuatro pasos:
 
 \paragraph{Paso 1: clasificación de tipos.} Referencia base: $K=3$, con
-asignación por terciles de la densidad individual (edades 20--65, mínimo 60
-meses de historia potencial). Robustez: (i) clasificación con la densidad de
+asignación por terciles de la densidad individual \emph{dentro de cada sexo}
+(edades 20--65, mínimo 60 meses de historia potencial). Robustez: (i) clasificación con la densidad de
 los primeros 60 meses y estimación con el resto de la muestra, para evitar
 estratificación endógena; (ii) $K=2$ y $K=4$; (iii) como extensión, mixture
 de verosimilitud completa tipo EM en que $\pi_k$ y los hazards se estiman
