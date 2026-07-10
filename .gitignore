@@ -12,10 +12,8 @@ calibration/data/raw/
 data/
 Data/
 
-# Outputs pesados y modelos entrenados
-output/*.pt
-output/*.png
-output/*.pdf
+# Outputs: no versionar (algunos derivan de microdatos SP a nivel individual)
+output/
 
 # Artefactos de EconDLSolvers
 solving.json
