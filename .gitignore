@@ -1,0 +1,20 @@
+# Terceros: se clona desde GitHub, no se versiona aquí
+EconDLSolvers/
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+*.egg-info/
+
+# Datos crudos grandes (versionar solo scripts que los descargan/procesan)
+calibration/data/raw/
+
+# Outputs pesados y modelos entrenados
+output/*.pt
+output/*.png
+output/*.pdf
+
+# Sistema
+.DS_Store
+nohup.out
