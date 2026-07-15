@@ -4,6 +4,7 @@
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{booktabs}
 \usepackage[margin=2.6cm]{geometry}
+\usepackage{natbib}
 \usepackage{hyperref}
 
 \newtheorem{assumption}{Supuesto}
@@ -183,9 +184,10 @@ muestra: la remuneración real mediana de los cotizantes cae $\sim$35\% entre
 1981 y 1987 y luego casi se triplica ($\sim$2,4\% real anual hasta 2023),
 mientras la composición etaria del panel también se desplaza. Sin una
 normalización explícita, la identificación de $m_{k,g}(a)$ es imposible
-(edad $=$ cohorte $+$ tiempo; Deaton--Paxson) y el crecimiento agregado se
-confundiría con retornos a la edad. La atribución a período y no a cohorte
-es el supuesto estándar en la literatura de ciclo de vida y es discutible;
+(edad $=$ cohorte $+$ tiempo; \citealp{deaton1994}) y el crecimiento agregado
+se confundiría con retornos a la edad. La atribución a período y no a cohorte
+es el supuesto estándar en la literatura de ciclo de vida
+\citep{cocco2005} y es discutible;
 se reportará la sensibilidad del perfil a la normalización alternativa.
 
 \begin{assumption}[Neutralidad salarial de las lagunas]
@@ -226,7 +228,7 @@ asignación por terciles de la densidad individual \emph{dentro de cada sexo}
 los primeros 60 meses y estimación con el resto de la muestra, para evitar
 estratificación endógena; (ii) $K=2$ y $K=4$; (iii) como extensión, mixture
 de verosimilitud completa tipo EM en que $\pi_k$ y los hazards se estiman
-conjuntamente (Heckman--Singer), dejando la clasificación dura como caso
+conjuntamente \citep{heckman1984}, dejando la clasificación dura como caso
 particular.
 
 \paragraph{Paso 2: hazards.} Logits \eqref{eq:logit} por tipo, sexo y estado
@@ -282,5 +284,8 @@ Consolidación) requerirá supuestos adicionales.
 \item \textbf{Pendiente.} Elección final de $K$, $\bar D$ y la frecuencia
 del modelo de ciclo de vida (mensual vs.\ anual con proceso agregado).
 \end{enumerate}
+
+\bibliographystyle{chicago}
+\bibliography{referencias}
 
 \end{document}
