@@ -299,6 +299,31 @@ definen por DINÁMICA de hazards (el "bajo" EM tiene densidad media 0,37 H /
 posterior media). En código y archivos internos se mantienen las claves
 bajo/medio/alto (mapa DISPLAY en scripts 06 y 09) para no romper el pipeline.
 
+### Interpretación de los tipos: qué se sabe y qué no (2026-07-15)
+
+- Perfiles salariales por tipo EM no monótonos (fig10): intermitente muy por
+  debajo; frágil ≥ estable (en mujeres, incluso creciente con la edad).
+  Explicación: la remuneración solo se observa condicional a cotizar. Para
+  el intermitente, rotación alta y baja paga son el mismo fenómeno; para el
+  frágil, sus escasos meses cotizados son selección de sus mejores estados
+  (salario de reserva). NO sesga P1/P2 (la acumulación usa exactamente el
+  salario condicional a cotizar); sería central si se endogenizara la
+  participación. Párrafo añadido al tex tras la figura de perfiles.
+- Test de hipótesis "frágil = profesional independiente" con tipo de
+  planilla: NO respaldada — planilla de independiente es marginal en todos
+  los tipos (0,7-2,1% de registros) y el frágil tiene la MENOR proporción.
+  Test débil por diseño (independientes históricamente no obligados: son
+  invisibles justo cuando ejercen como tales). Conclusión honesta: el frágil
+  es un grupo definido por conducta, de composición ocupacional inobservable
+  en la HPA. "Intermitente = empleos precarios" SÍ respaldado: salarios
+  bajos + planillas de empleador + estacionalidad 9-11m. Dato colateral:
+  subsidios de incapacidad más frecuentes en estables (16,6% de registros
+  en mujeres estables) — se necesita empleo para tener licencia.
+- **Extensión opcional (no bloqueante, no requerida por P1 ni P2)**: bases
+  vinculadas EPS-HPA de la SP (la muestra HPA es la muestra teórica de la
+  EPS) permitirían caracterizar ocupación/educación/informalidad de los
+  tipos. Gestión de Carlos si le interesa para el paper.
+
 ### Pendientes inmediatos
 
 1. Estimación formal P1 (pasos 1-3 del tex) + validación por simulación.
