@@ -251,6 +251,31 @@ edad; robustez obligatoria re-estimando por subperíodo (1990-2005 vs
 - Falta del P1: agregación mensual→anual (se hará junto al diseño del DP),
   proceso salarial definitivo de F-bajo, y momentos de validación de salarios.
 
+### Selección de K por EM Heckman-Singer (2026-07-15, script 08)
+
+Mixture de verosimilitud completa por sexo (tipo = única latente; verosimilitud
+individual = producto de Bernoullis sobre celdas), K=2..5, EM con múltiples
+inicializaciones, guardado incremental (el sandbox mata procesos largos).
+
+Resultados: BIC decrece monótono hasta K=5 en ambos sexos (sobre-selección
+esperable: cientos de observaciones por individuo y penalización en
+log(individuos)). ICL: mínimo en K=4 para hombres (vs K=3: -1.190); para
+mujeres plano entre K=2-4 (rango 154 puntos) con mínimo en K=5 vía una clase
+degenerada de pi=1,1%. Ganancias marginales de loglik con codo en K=3-4.
+
+**Hallazgo relevante**: el crosstab EM-K3 vs terciles muestra acuerdo alto en
+los polos (73-79%) pero el tercil MEDIO se reparte (solo 25-34% va a la clase
+media del EM; ~46-48% es dinámicamente "alto"). El EM agrupa por dinámica de
+hazards, no por densidad bruta, y las pi resultan desiguales
+(M: 0,36/0,21/0,43; F: 0,41/0,16/0,43). Nitidez posterior moderada:
+44-52% con posterior modal >0,9 (clasificación dura pierde información).
+
+**Decisión pendiente (Carlos)**: (a) mantener K=3 como base (recomendado;
+K=4-M como robustez de apéndice); (b) adoptar la clasificación EM como
+canónica y re-correr perfiles salariales y validación con tipos EM
+(coherencia metodológica para el paper), o mantener terciles para el
+comentario SP y EM solo en el paper.
+
 ### Pendientes inmediatos
 
 1. Estimación formal P1 (pasos 1-3 del tex) + validación por simulación.
