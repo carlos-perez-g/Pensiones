@@ -166,6 +166,28 @@ z_{it} = \rho\, z_{i,t-1} + \eta_{it}, \qquad
 \varepsilon_{it} \sim iid\,(0, \sigma^2_{\varepsilon,k}).
 \end{equation}
 
+\begin{assumption}[Identificación edad--período--cohorte]
+\label{as:apc}
+La tendencia común del ingreso real se atribuye a efectos de período
+(crecimiento agregado de la productividad) y no a efectos de cohorte. El
+perfil de edad $m_{k,g}(\cdot)$ se identifica de la variación intra-individuo
+neta de efectos de tiempo; su nivel se ancla a los años recientes
+(2015--2023); y el crecimiento salarial real futuro se introduce en el modelo
+de ciclo de vida como un parámetro explícito $g$, sujeto a análisis de
+sensibilidad (rango de referencia 1,25\%--2\% anual, consistente con las
+proyecciones oficiales).
+\end{assumption}
+
+El Supuesto~\ref{as:apc} responde a la fuerte no-estacionariedad de la
+muestra: la remuneración real mediana de los cotizantes cae $\sim$35\% entre
+1981 y 1987 y luego casi se triplica ($\sim$2,4\% real anual hasta 2023),
+mientras la composición etaria del panel también se desplaza. Sin una
+normalización explícita, la identificación de $m_{k,g}(a)$ es imposible
+(edad $=$ cohorte $+$ tiempo; Deaton--Paxson) y el crecimiento agregado se
+confundiría con retornos a la edad. La atribución a período y no a cohorte
+es el supuesto estándar en la literatura de ciclo de vida y es discutible;
+se reportará la sensibilidad del perfil a la normalización alternativa.
+
 \begin{assumption}[Neutralidad salarial de las lagunas]
 \label{as:noscar}
 El componente persistente $z_{it}$ evoluciona en tiempo calendario con la
@@ -207,19 +229,27 @@ de verosimilitud completa tipo EM en que $\pi_k$ y los hazards se estiman
 conjuntamente (Heckman--Singer), dejando la clasificación dura como caso
 particular.
 
-\paragraph{Paso 2: hazards.} Logits \eqref{eq:logit} por tipo y estado de
-origen, con dummies de duración $\{1,\dots,12\}$, agrupación 13--18, 19--24 y
-$\ge \bar D$, spline cúbico en edad y dummy de sexo. Ponderación igual por
+\paragraph{Paso 2: hazards.} Logits \eqref{eq:logit} por tipo, sexo y estado
+de origen, con dummies de duración $\{1,\dots,12\}$, agrupación 13--18,
+19--24 y $\ge \bar D$, y spline cúbico en edad. Ponderación igual por
 observación persona--mes; errores estándar agrupados por individuo.
+Robustez temporal obligatoria: re-estimación por subperíodos (1990--2005 y
+2008--2023); ante inestabilidad estructural se privilegia el período
+reciente, que es el relevante para la proyección.
 
-\paragraph{Paso 3: remuneraciones.} Con la submuestra $s_{it}=1$ y
-excluyendo observaciones en el tope ($\approx$ flag administrativo): (i)
-$m_k(a)$ y $\zeta_{ig}$ por regresión con efectos fijos individuales sobre
-splines de edad, por tipo; (ii) $\rho$, $\sigma^2_{\eta,k}$ y
-$\sigma^2_{\varepsilon,k}$ por GMM sobre autocovarianzas de los residuos en
-frecuencia anual (promedio de meses cotizados del año), siguiendo la práctica
-estándar para separar componente persistente y transitorio. La censura por
-tope se trata por máxima verosimilitud tobit como robustez.
+\paragraph{Paso 3: remuneraciones.} Con la submuestra $s_{it}=1$,
+excluyendo observaciones en el tope (flag administrativo), los meses cuya
+remuneración incluye subsidios de incapacidad (la base de la licencia no es
+salario de mercado) y, como robustez, los meses con registros repetidos del
+mismo pagador (pagos retroactivos que inflan el mes de entero): (i)
+$m_{k,g}(a)$ y $\zeta_{i}$ por regresión con efectos fijos individuales sobre
+splines de edad \emph{y efectos de año}, por tipo y sexo, bajo la
+normalización del Supuesto~\ref{as:apc}, con nivel anclado a 2015--2023;
+(ii) $\rho$, $\sigma^2_{\eta,k}$ y $\sigma^2_{\varepsilon,k}$ por GMM sobre
+autocovarianzas de los residuos en frecuencia anual (promedio de meses
+cotizados del año), siguiendo la práctica estándar para separar componente
+persistente y transitorio. La censura por tope se trata por máxima
+verosimilitud tobit como robustez.
 
 \paragraph{Paso 4: validación por momentos no utilizados.} El proceso
 estimado se simula (mensualmente, desde la edad de afiliación) y se contrasta

@@ -205,6 +205,29 @@ con la versión anterior del builder.
 o tratando meses con mismo_pagador_rep=1 (retroactivos) y tiene_subsidio=1
 (la base del subsidio no es salario de mercado).
 
+### No-estacionariedad temporal de la muestra (decidido 2026-07-15)
+
+Hechos (series anuales 1981-2023, output/calibration/):
+- Edad media del panel: 33,3 → 39,2 (2006) → 36,6 (2011-12, refrescos EPS) →
+  41,5 (2023). Panel crece de 13k a 148k persona-mes/año.
+- Remuneración real (UF) entre cotizantes: cae ~35% 1981-1987 (crisis del 82) y
+  luego casi se triplica: ~2,4% real anual. Mediana 5,7 UF (1987) → 25 (2023).
+
+Problema: estimar el perfil edad-ingreso agrupando 1981-2023 confunde edad,
+período y cohorte (edad = cohorte + tiempo; Deaton-Paxson). La idea inicial de
+"ponderar hacia años recientes" se descartó por opaca.
+
+**Decisión** (estándar de la literatura de ciclo de vida, à la Cocco-Gomes-
+Maenhout): (i) la FORMA del perfil m_{k,g}(a) se estima con efectos fijos
+individuales + efectos de tiempo, atribuyendo la tendencia común a PERÍODO y
+no a cohorte (supuesto de normalización declarado en el tex, Supuesto 2);
+(ii) el NIVEL se ancla a los años recientes (2015-2023); (iii) el crecimiento
+salarial real futuro g es un parámetro explícito del modelo de ciclo de vida,
+con sensibilidad (rango de referencia: 1,25-2% como en proyecciones
+DIPRES/SP). Para el proceso de PARTICIPACIÓN: los hazards condicionan en
+edad; robustez obligatoria re-estimando por subperíodo (1990-2005 vs
+2008-2023); si hay inestabilidad estructural, privilegiar el período reciente.
+
 ### Pendientes inmediatos
 
 1. Estimación formal P1 (pasos 1-3 del tex) + validación por simulación.
