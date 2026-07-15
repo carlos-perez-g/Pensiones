@@ -68,7 +68,11 @@ modelo combina, en consecuencia, \emph{tipos discretos} y
 El tiempo es discreto y mensual, $t = 1, 2, \dots$; el individuo $i$ entra al
 sistema en el mes de su afiliación y se caracteriza por su sexo $g_i$ y un
 \emph{tipo} permanente $k_i \in \{1,\dots,K\}$ con probabilidades
-poblacionales $\pi_{k|g}$ \emph{condicionales al sexo}. Todo el modelo se
+poblacionales $\pi_{k|g}$ \emph{condicionales al sexo}. Los tipos se
+denominan por su dinámica de participación —adhesión \emph{frágil},
+\emph{intermitente} y \emph{estable}— ordenados por densidad posterior
+media; las etiquetas describen patrones de transición, no tramos de densidad
+(véase el Paso 1 de la Sección~\ref{sec:estimacion}). Todo el modelo se
 especifica y estima separadamente por sexo: las brechas observadas (densidad
 mediana de vida de 0,644 en hombres vs.\ 0,457 en mujeres; brecha de densidad
 por edad creciente de 12 a 20 puntos porcentuales entre los 25 y los 64
@@ -240,14 +244,17 @@ ICL —que penaliza clasificaciones difusas— alcanza su mínimo en $K=4$ para
 hombres por margen modesto y es esencialmente plano en $K=2$--$4$ para
 mujeres, y las ganancias de verosimilitud hacen codo en $K=3$--$4$. Se adopta
 $K=3$ como especificación base ($K=4$ masculino como robustez). Las
-proporciones estimadas son desiguales ($\hat\pi_{k|g}$: hombres
-0,36/0,21/0,43; mujeres 0,41/0,16/0,43). La clasificación dura por terciles
-de densidad —usada como inicialización y robustez— coincide con el tipo
-modal EM en los polos ($\sim$75\%) pero no en el centro: el EM agrupa por
-\emph{dinámica} de los hazards y no por densidad bruta, y reasigna casi la
-mitad del tercil medio al tipo alto. Solo la mitad de los individuos exhibe
-posterior modal superior a 0,9, lo que desaconseja la clasificación dura
-como especificación principal.
+proporciones estimadas son desiguales ($\hat\pi_{k|g}$, orden
+frágil/intermitente/estable: hombres 0,36/0,21/0,43; mujeres
+0,41/0,16/0,43). La clasificación dura por terciles de densidad —usada como
+inicialización y robustez— coincide con el tipo modal EM en los polos
+($\sim$75\%) pero no en el centro: el EM agrupa por \emph{dinámica} de los
+hazards y no por densidad bruta, y reasigna casi la mitad del tercil medio
+de densidad al tipo estable. Por lo mismo, el tipo frágil no equivale a
+``casi no cotiza'': sus densidades medias son 0,37 (hombres) y 0,31
+(mujeres). Solo la mitad de los individuos exhibe posterior modal superior
+a 0,9, lo que desaconseja la clasificación dura como especificación
+principal.
 
 \paragraph{Paso 2: hazards.} Logits \eqref{eq:logit} por tipo, sexo y estado
 de origen, con dummies de duración $\{1,\dots,12\}$, agrupación 13--18,
@@ -314,10 +321,10 @@ que refleja composición del empleo formal— y que en el modelo de ciclo de
 vida entrará como el parámetro $g$. Las varianzas anuales (netas del efecto
 fijo individual) arrojan $\rho \in [0{,}50,\ 0{,}70]$ y
 $\sigma^2_\eta \in [0{,}04,\ 0{,}10]$ en los seis grupos. Un dividendo de la
-clasificación EM: bajo terciles, el grupo mujer--bajo era inestimable (6.242
-persona--año y selección severa); con tipos EM reúne 28.257 persona--año y
-sus parámetros son regulares ($\rho = 0{,}67$), eliminando la necesidad de
-agrupación ad hoc.
+clasificación EM: bajo terciles, el grupo mujer--frágil era inestimable
+(6.242 persona--año y selección severa); con tipos EM reúne 28.257
+persona--año y sus parámetros son regulares ($\rho = 0{,}67$), eliminando la
+necesidad de agrupación ad hoc.
 
 \begin{figure}[htbp]
 \centering
@@ -328,6 +335,18 @@ años refleja selección post edad legal de retiro y no se utiliza en el
 modelo.}
 \label{fig:perfiles}
 \end{figure}
+
+El ordenamiento no monótono de la Figura~\ref{fig:perfiles} —el tipo frágil
+exhibe remuneraciones observadas iguales o superiores a las del estable, y
+el intermitente muy inferiores a ambos— es informativo y esperable: la
+remuneración solo se observa \emph{condicional a cotizar}. Para el tipo
+intermitente, la alta rotación y la baja remuneración son el mismo fenómeno
+(empleos formales cortos y mal pagados). Para el tipo frágil, los escasos
+meses cotizados son una muestra seleccionada de sus mejores estados (lógica
+de salario de reserva), selección que se intensifica con la edad. Esta
+selección no sesga el uso del proceso en el modelo de ciclo de vida —la
+acumulación de saldo requiere precisamente la remuneración condicional a
+cotizar— pero sería central si la participación se endogenizara.
 
 \subsection{Validación con momentos no utilizados}
 

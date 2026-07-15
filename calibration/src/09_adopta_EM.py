@@ -119,8 +119,10 @@ for s, fname, ttl in [(0, 'fig8_ajuste_hazard_laguna.png', 'Salida de laguna'),
             ax.plot(durs, emp['y'] / emp['n'], 'o', color=col, ms=4, alpha=0.6)
             wts = c.groupby('age_i')['n'].sum().reindex(range(nA), fill_value=0).values
             wts = wts / max(wts.sum(), 1)
+            DISPLAY = {'bajo': 'frágil', 'medio': 'intermitente',
+                       'alto': 'estable'}
             ax.plot(np.arange(1, DBAR + 1), lam_all[(g, k, s)] @ wts,
-                    '-', color=col, label=f'{k} (EM)')
+                    '-', color=col, label=f'adhesión {DISPLAY[k]}')
         ax.set_xlabel('Duración (meses)'); ax.set_title(f'{ttl} — {gl}')
         ax.legend(fontsize=8)
     axes[0].set_ylabel('Hazard mensual')

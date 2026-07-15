@@ -290,6 +290,15 @@ Ejecutado (script 09 + re-runs de 06 y 07):
   crosstab con terciles), párrafo de varianzas y tabla de validación con
   números EM.
 
+### Nomenclatura de tipos (decidido 2026-07-15)
+
+Las etiquetas bajo/medio/alto inducían a leer densidad, pero los tipos EM se
+definen por DINÁMICA de hazards (el "bajo" EM tiene densidad media 0,37 H /
+0,31 M — no es "casi no cotiza"). Nueva nomenclatura en tex y figuras:
+**adhesión frágil / intermitente / estable** (ordenados por densidad
+posterior media). En código y archivos internos se mantienen las claves
+bajo/medio/alto (mapa DISPLAY en scripts 06 y 09) para no romper el pipeline.
+
 ### Pendientes inmediatos
 
 1. Estimación formal P1 (pasos 1-3 del tex) + validación por simulación.
