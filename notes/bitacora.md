@@ -228,6 +228,29 @@ DIPRES/SP). Para el proceso de PARTICIPACIÓN: los hazards condicionan en
 edad; robustez obligatoria re-estimando por subperíodo (1990-2005 vs
 2008-2023); si hay inestabilidad estructural, privilegiar el período reciente.
 
+### Estimación del producto 1 completada (2026-07-15, scripts 05-07)
+
+- **Hazards** (05): 12 logits (sexo×tipo×estado) sobre celdas duración×edad
+  (MLE exacto por estadístico suficiente). Grillas λ(d=1..24, edad) en
+  output/calibration/hazards/, π_{k|g}, condiciones iniciales. Ajuste bueno
+  (fig8/9), bulto 9-11m capturado. Robustez subperíodo: +6% log medio
+  (reentrada +11% más rápida en 2008-23); estable, ambos juegos guardados.
+- **Salarios** (06): perfiles m_{k,g}(a) OLS edad+año (cohorte=0, ancla
+  2015-23); joroba masculina pico 40-45, perfiles femeninos planos.
+  Efectos de año: +3,1-3,7%/año (composición formal > índice agregado).
+  Varianzas anuales netas de FE: ρ∈[0.5,0.7], σ²_η∈[0.05,0.09].
+  PROBLEMAS ANOTADOS: F-bajo inestimable (ρ→1, n=6,2k, selección) → agrupar
+  con F-medio (sensibilidad pendiente); ρ tocó cota inferior en 2 grupos;
+  sesgo por demeaning en paneles cortos no corregido (documentado).
+- **Validación no targeted** (07): la forma de U EMERGE del modelo simulado
+  sobre las ventanas reales. Datos vs modelo: densidad 0.538/0.532; U shares
+  <0.10: 0.155/0.173, >0.90: 0.165/0.188 (leve sobre-polarización);
+  lagunas mediana 3/3, media 11.3/12.6, p90 27/30; episodios 7.7/7.7.
+  Sesgos conservadores para P2. Figuras y tabla insertadas en el tex
+  (sección "Resultados de la estimación").
+- Falta del P1: agregación mensual→anual (se hará junto al diseño del DP),
+  proceso salarial definitivo de F-bajo, y momentos de validación de salarios.
+
 ### Pendientes inmediatos
 
 1. Estimación formal P1 (pasos 1-3 del tex) + validación por simulación.

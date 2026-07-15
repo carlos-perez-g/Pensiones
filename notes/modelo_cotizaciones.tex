@@ -3,6 +3,7 @@
 \usepackage[spanish,es-nodecimaldot,es-noshorthands]{babel}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{booktabs}
+\usepackage{graphicx}
 \usepackage[margin=2.6cm]{geometry}
 \usepackage{natbib}
 \usepackage[colorlinks=true, citecolor=blue, linkcolor=blue, urlcolor=blue]{hyperref}
@@ -263,6 +264,94 @@ de la densidad anual. La agregación mensual$\to$anual para el modelo de
 ciclo de vida se efectúa sobre estas mismas simulaciones, eligiendo la
 representación anual más parsimoniosa que preserve los momentos relevantes
 para la acumulación de saldo.
+
+\section{Resultados de la estimación}
+\label{sec:resultados}
+
+Con $K=3$ y $\bar D = 24$, los doce logits (2 sexos $\times$ 3 tipos
+$\times$ 2 estados) se estimaron sobre celdas agregadas
+duración$\times$edad (estadístico suficiente del MLE con regresores
+categóricos aditivos). La Figura~\ref{fig:hazfit} muestra el ajuste para la
+salida de laguna: el modelo reproduce tanto los niveles —que difieren por un
+factor de 3 entre tipos— como la caída con la duración y el máximo local en
+los 9--11 meses. El ordenamiento de niveles se invierte en los hazards de
+término de cotización, confirmando que los tipos capturan dinámicas espejo y
+no solo niveles. La robustez por subperíodo indica estabilidad razonable:
+los hazards 2008--2023 son en promedio 6\% más altos (en logs, $+0{,}06$)
+que los de 1990--2005, con la reentrada desde laguna $\sim$11\% más rápida
+en el período reciente.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{../output/calibration/fig8_ajuste_hazard_laguna.png}
+\caption{Hazard mensual de salida de laguna por duración: celdas empíricas
+(puntos) y ajuste del logit (líneas), por tipo de adhesión y sexo, promediado
+sobre tramos de edad con pesos muestrales.}
+\label{fig:hazfit}
+\end{figure}
+
+La Figura~\ref{fig:perfiles} presenta los perfiles edad--ingreso anclados a
+2015--2023. Los efectos de período absorbieron un crecimiento común de
+3,1--3,7\% anual —superior al índice agregado de remuneraciones reales, lo
+que refleja composición del empleo formal— y que en el modelo de ciclo de
+vida entrará como el parámetro $g$. Las varianzas anuales (netas del efecto
+fijo individual) arrojan $\rho \in [0{,}5,\ 0{,}7]$ y
+$\sigma^2_\eta \in [0{,}05,\ 0{,}09]$ para los grupos grandes; el grupo
+mujer--bajo es inestimable con precisión (6.242 persona--año y selección
+severa) y su proceso salarial se tratará por agrupación con el tipo medio,
+decisión pendiente de sensibilidad.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{../output/calibration/fig10_perfiles_edad_ingreso.png}
+\caption{Perfiles edad--ingreso $\exp(\hat m_{k,g}(a))$ por tipo y sexo, en
+UF mensuales al nivel 2015--2023 (escala log). El tramo femenino sobre los 60
+años refleja selección post edad legal de retiro y no se utiliza en el
+modelo.}
+\label{fig:perfiles}
+\end{figure}
+
+\subsection{Validación con momentos no utilizados}
+
+El proceso completo se simuló replicando la estructura exacta del panel
+(ventana observada, tipo y sexo de cada individuo; semilla fija). El Cuadro
+\ref{tab:valid} y la Figura~\ref{fig:validU} comparan momentos que la
+estimación nunca utilizó. La forma de U de las densidades individuales
+—el hecho estilizado central— emerge de la dinámica estimada; el modelo
+polariza levemente en exceso (sobrepredice ambas colas en $\sim$2 puntos) y
+alarga levemente la cola de duración de lagunas, sesgos conservadores para
+nuestra aplicación (implican, si acaso, más riesgo de laguna del que hay).
+
+\begin{table}[htbp]
+\centering
+\caption{Momentos no utilizados en la estimación: datos vs.\ modelo}
+\label{tab:valid}
+\begin{tabular}{lcc}
+\toprule
+ & Datos & Modelo \\
+\midrule
+Densidad media                          & 0,538 & 0,532 \\
+Densidad individual: p10                & 0,040 & 0,046 \\
+\quad p50                               & 0,563 & 0,545 \\
+\quad p90                               & 0,953 & 0,955 \\
+Share densidad $<$ 0,10                 & 0,155 & 0,173 \\
+Share densidad $>$ 0,90                 & 0,165 & 0,188 \\
+Duración de lagunas: mediana (meses)    & 3     & 3     \\
+\quad media                             & 11,3  & 12,6  \\
+\quad p90                               & 27    & 30    \\
+Episodios de laguna por individuo       & 7,7   & 7,7   \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.75\textwidth]{../output/calibration/fig12_validacion_U.png}
+\caption{Distribución de densidades individuales de cotización: datos
+(histograma) vs.\ proceso estimado simulado sobre las mismas ventanas
+(línea). Momento no utilizado en la estimación.}
+\label{fig:validU}
+\end{figure}
 
 \section{Limitaciones y decisiones abiertas}
 
