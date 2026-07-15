@@ -80,7 +80,7 @@ s_{it} \in \{0,1\}, \qquad 1 = \text{cotiza}, \quad 0 = \text{laguna},
 \]
 y la duración en el estado corriente, truncada en $\bar D$ meses, es
 \[
-d_{it} = \min\bigl\{\#\{\tau \le t : s_{i\tau} = s_{it} \ \forall \tau' \in
+d_{it} = \min\bigl\{\#\{\tau \le t : s_{i\tau'} = s_{it} \ \forall \tau' \in
 [\tau, t]\},\ \bar D\bigr\}.
 \]
 El truncamiento se justifica empíricamente por el aplanamiento de los hazards
@@ -103,10 +103,13 @@ Se especifican como logits:
 h^{sr}_{g}(a)\bigr), \qquad \Lambda(x) = \frac{e^x}{1+e^x},
 \label{eq:logit}
 \end{equation}
-donde $f^{sr}_{k,g}(\cdot)$ es una función escalonada o spline de la duración
-(constante para $d \ge \bar D$) y $h^{sr}_{g}(\cdot)$ un polinomio o spline en
-edad. La interacción completa tipo$\times$duración en $f^{sr}_{k,g}$ es el
-objeto central: capturar cuánta memoria de duración sobrevive dentro de tipo.
+donde $\alpha^{sr}_{k,g}$ es el intercepto específico al tipo, sexo y estado
+de origen, $f^{sr}_{k,g}(\cdot)$ es una función escalonada de la duración
+(indicadores para $d = 1,\dots,12$ y tramos $13$--$18$, $19$--$23$ y
+$\ge \bar D$, constante desde $\bar D$) y $h^{sr}_{g}(\cdot)$ una función
+escalonada en tramos quinquenales de edad. La interacción completa
+tipo$\times$duración en $f^{sr}_{k,g}$ es el objeto central: capturar cuánta
+memoria de duración sobrevive dentro de tipo.
 
 \begin{assumption}[Exogeneidad del proceso de participación]
 \label{as:exo}
