@@ -223,14 +223,28 @@ objetos estocásticos.
 Toda la estimación se realiza separadamente por sexo. La estrategia tiene
 cuatro pasos:
 
-\paragraph{Paso 1: clasificación de tipos.} Referencia base: $K=3$, con
-asignación por terciles de la densidad individual \emph{dentro de cada sexo}
-(edades 20--65, mínimo 60 meses de historia potencial). Robustez: (i) clasificación con la densidad de
-los primeros 60 meses y estimación con el resto de la muestra, para evitar
-estratificación endógena; (ii) $K=2$ y $K=4$; (iii) como extensión, mixture
-de verosimilitud completa tipo EM en que $\pi_k$ y los hazards se estiman
-conjuntamente \citep{heckman1984}, dejando la clasificación dura como caso
-particular.
+\paragraph{Paso 1: tipos por mixture de verosimilitud completa.} Los tipos
+se estiman por EM \citep{heckman1984}: el tipo es la única variable latente,
+de modo que, condicional a $k$, la verosimilitud de la secuencia mensual del
+individuo es un producto de Bernoullis sobre sus transiciones, y el
+estadístico suficiente individual son sus conteos por celda
+estado$\times$duración$\times$edad. El paso E entrega probabilidades
+posteriores de tipo; el paso M re-estima los logits \eqref{eq:logit} con
+pesos posteriores, junto con $\pi_{k|g}$ y las condiciones iniciales. $K$ se
+elige comparando $K=2,\dots,5$ por sexo: el BIC decrece monótonamente
+(sobre-selección esperable con cientos de observaciones por individuo), el
+ICL —que penaliza clasificaciones difusas— alcanza su mínimo en $K=4$ para
+hombres por margen modesto y es esencialmente plano en $K=2$--$4$ para
+mujeres, y las ganancias de verosimilitud hacen codo en $K=3$--$4$. Se adopta
+$K=3$ como especificación base ($K=4$ masculino como robustez). Las
+proporciones estimadas son desiguales ($\hat\pi_{k|g}$: hombres
+0,36/0,21/0,43; mujeres 0,41/0,16/0,43). La clasificación dura por terciles
+de densidad —usada como inicialización y robustez— coincide con el tipo
+modal EM en los polos ($\sim$75\%) pero no en el centro: el EM agrupa por
+\emph{dinámica} de los hazards y no por densidad bruta, y reasigna casi la
+mitad del tercil medio al tipo alto. Solo la mitad de los individuos exhibe
+posterior modal superior a 0,9, lo que desaconseja la clasificación dura
+como especificación principal.
 
 \paragraph{Paso 2: hazards.} Logits \eqref{eq:logit} por tipo, sexo y estado
 de origen, con dummies de duración $\{1,\dots,12\}$, agrupación 13--18,
@@ -269,9 +283,9 @@ para la acumulación de saldo.
 \label{sec:resultados}
 
 Con $K=3$ y $\bar D = 24$, los doce logits (2 sexos $\times$ 3 tipos
-$\times$ 2 estados) se estimaron sobre celdas agregadas
-duración$\times$edad (estadístico suficiente del MLE con regresores
-categóricos aditivos). La Figura~\ref{fig:hazfit} muestra el ajuste para la
+$\times$ 2 estados) provienen del paso M del EM en el óptimo: celdas
+agregadas duración$\times$edad ponderadas por las probabilidades posteriores
+de tipo. La Figura~\ref{fig:hazfit} muestra el ajuste para la
 salida de laguna: el modelo reproduce tanto los niveles —que difieren por un
 factor de 3 entre tipos— como la caída con la duración y el máximo local en
 los 9--11 meses. El ordenamiento de niveles se invierte en los hazards de
@@ -295,11 +309,12 @@ La Figura~\ref{fig:perfiles} presenta los perfiles edad--ingreso anclados a
 3,1--3,7\% anual —superior al índice agregado de remuneraciones reales, lo
 que refleja composición del empleo formal— y que en el modelo de ciclo de
 vida entrará como el parámetro $g$. Las varianzas anuales (netas del efecto
-fijo individual) arrojan $\rho \in [0{,}5,\ 0{,}7]$ y
-$\sigma^2_\eta \in [0{,}05,\ 0{,}09]$ para los grupos grandes; el grupo
-mujer--bajo es inestimable con precisión (6.242 persona--año y selección
-severa) y su proceso salarial se tratará por agrupación con el tipo medio,
-decisión pendiente de sensibilidad.
+fijo individual) arrojan $\rho \in [0{,}50,\ 0{,}70]$ y
+$\sigma^2_\eta \in [0{,}04,\ 0{,}10]$ en los seis grupos. Un dividendo de la
+clasificación EM: bajo terciles, el grupo mujer--bajo era inestimable (6.242
+persona--año y selección severa); con tipos EM reúne 28.257 persona--año y
+sus parámetros son regulares ($\rho = 0{,}67$), eliminando la necesidad de
+agrupación ad hoc.
 
 \begin{figure}[htbp]
 \centering
@@ -317,10 +332,13 @@ El proceso completo se simuló replicando la estructura exacta del panel
 (ventana observada, tipo y sexo de cada individuo; semilla fija). El Cuadro
 \ref{tab:valid} y la Figura~\ref{fig:validU} comparan momentos que la
 estimación nunca utilizó. La forma de U de las densidades individuales
-—el hecho estilizado central— emerge de la dinámica estimada; el modelo
-polariza levemente en exceso (sobrepredice ambas colas en $\sim$2 puntos) y
-alarga levemente la cola de duración de lagunas, sesgos conservadores para
-nuestra aplicación (implican, si acaso, más riesgo de laguna del que hay).
+—el hecho estilizado central— emerge de la dinámica estimada. Los desajustes
+residuales son pequeños y de signo declarado: el modelo alarga levemente la
+cola de duración de lagunas (conservador: exagera el riesgo de laguna) y
+subpredice la cola de densidades altas en 2,6 puntos (0,139 vs.\ 0,165), un
+sesgo que \emph{no} es conservador para la aplicación de política —reduce
+los pensionados autofinanciados simulados— y que se tendrá presente al
+interpretar los resultados del modelo de ciclo de vida.
 
 \begin{table}[htbp]
 \centering
@@ -330,16 +348,16 @@ nuestra aplicación (implican, si acaso, más riesgo de laguna del que hay).
 \toprule
  & Datos & Modelo \\
 \midrule
-Densidad media                          & 0,538 & 0,532 \\
-Densidad individual: p10                & 0,040 & 0,046 \\
-\quad p50                               & 0,563 & 0,545 \\
-\quad p90                               & 0,953 & 0,955 \\
-Share densidad $<$ 0,10                 & 0,155 & 0,173 \\
-Share densidad $>$ 0,90                 & 0,165 & 0,188 \\
+Densidad media                          & 0,537 & 0,533 \\
+Densidad individual: p10                & 0,040 & 0,051 \\
+\quad p50                               & 0,563 & 0,549 \\
+\quad p90                               & 0,953 & 0,930 \\
+Share densidad $<$ 0,10                 & 0,155 & 0,148 \\
+Share densidad $>$ 0,90                 & 0,165 & 0,139 \\
 Duración de lagunas: mediana (meses)    & 3     & 3     \\
-\quad media                             & 11,3  & 12,6  \\
-\quad p90                               & 27    & 30    \\
-Episodios de laguna por individuo       & 7,7   & 7,7   \\
+\quad media                             & 11,3  & 12,5  \\
+\quad p90                               & 27    & 31    \\
+Episodios de laguna por individuo       & 7,6   & 7,4   \\
 \bottomrule
 \end{tabular}
 \end{table}

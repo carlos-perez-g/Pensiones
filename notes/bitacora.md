@@ -270,11 +270,25 @@ hazards, no por densidad bruta, y las pi resultan desiguales
 (M: 0,36/0,21/0,43; F: 0,41/0,16/0,43). Nitidez posterior moderada:
 44-52% con posterior modal >0,9 (clasificación dura pierde información).
 
-**Decisión pendiente (Carlos)**: (a) mantener K=3 como base (recomendado;
-K=4-M como robustez de apéndice); (b) adoptar la clasificación EM como
-canónica y re-correr perfiles salariales y validación con tipos EM
-(coherencia metodológica para el paper), o mantener terciles para el
-comentario SP y EM solo en el paper.
+**DECIDIDO (Carlos, 2026-07-15)**: K=3 base y clasificación EM CANÓNICA.
+Ejecutado (script 09 + re-runs de 06 y 07):
+
+- Artefactos por terciles respaldados con sufijo _terciles; los nombres
+  canónicos (tipos_por_pid, lambda_*, pi_tipos, cond_iniciales) ahora son EM.
+  Las grillas λ canónicas son las del M-step del EM (ponderadas por
+  posteriores). fig8/9 regeneradas con tipos EM modales.
+- **Salarios re-estimados**: el problema F-bajo DESAPARECIÓ — era artefacto
+  de los terciles. Con EM: 28.257 persona-año (antes 6.242), ρ=0,67 regular.
+  Los seis grupos quedan bien estimados: ρ∈[0,50-0,70], σ²_η∈[0,04-0,10];
+  crecimiento de efectos de año 2,7-3,6%/año.
+- **Validación re-corrida**: la U sigue emergiendo. Datos vs modelo:
+  densidad 0,537/0,533; lagunas mediana 3/3, media 11,3/12,5, p90 27/31;
+  episodios 7,6/7,4. Cambio de signo en las colas: ahora leve
+  SUB-predicción de la cola alta (0,139 vs 0,165), sesgo NO conservador
+  para la tesis PGU (reduce autofinanciados simulados) — declarado en el tex.
+- Tex actualizado: Paso 1 reescrito (mixture EM canónica, selección de K,
+  crosstab con terciles), párrafo de varianzas y tabla de validación con
+  números EM.
 
 ### Pendientes inmediatos
 
