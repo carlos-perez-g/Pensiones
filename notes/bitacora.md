@@ -167,6 +167,44 @@ de segundo orden, no usar como argumento.
 - Panel censurado en solicitud de pensión / 65 años; extensión post-65 pendiente
   (relevante para Fondo de Consolidación).
 
+---
+
+## 2026-07-15 — Sesión 2 (parcial): registros múltiples en ccico
+
+Aviso externo: posibles registros múltiples por persona. Verificado:
+
+- 12,0% de los persona-mes tiene >1 registro en ccico. Causas legítimas:
+  multiempleo (varios pagadores t_planilla=3; 6,5% de los meses cotizados) y
+  subsidios de incapacidad (t=6, la entidad pagadora cotiza junto al empleador;
+  4,1% de los meses). No son errores.
+- 38.584 filas duplicadas EXACTAS (0,76%), concentradas en t_planilla=0 "sin
+  información" (60% vs 17% global) y 54% con remuneración vacía → artefacto de
+  registro. ELIMINADAS (regla R1, script 04).
+- 7 correl de ccico (108 filas) sin match en características → excluidos.
+- correl es único en características; 8.435 comparten (sexo, mes nac., mes
+  afil.) pero es colisión combinatoria esperable, no identidades duplicadas.
+  Caveat: persona con >1 correl es indetectable; se asume que la SP asigna
+  correl por persona.
+
+**Impacto**: participación/densidad/hazards INTACTOS (el indicador cotiza/no
+cotiza no depende del número de registros; verificado: densidad 0,5345 idéntica).
+Remuneración corregida en 21.466 persona-mes (0,52% de los meses cotizados);
+en el mes afectado típico el duplicado DUPLICABA la remuneración (cambio
+relativo mediano = 1,0; máx 13x). Cuantiles agregados de rem_uf no se mueven a
+4 decimales; los momentos de nivel individual (spikes, varianza transitoria)
+sí estaban contaminados y ahora están limpios.
+
+**Panel v2** (`panel_mensual.pkl`, respaldo v1 en `_v1_prededup.pkl`): dedup
+exacto + flags nuevos por persona-mes (n_registros, n_pagadores,
+tiene_subsidio, mismo_pagador_rep) para que el proceso salarial pueda excluir
+o winsorizar meses con subsidio/retroactivos. Además optimizado en memoria
+(IDs enteros, float32, categorías) — el sandbox mataba los procesos por RAM
+con la versión anterior del builder.
+
+**Lección para el proceso salarial (paso 3 del tex)**: estimar σ_ε excluyendo
+o tratando meses con mismo_pagador_rep=1 (retroactivos) y tiene_subsidio=1
+(la base del subsidio no es salario de mercado).
+
 ### Pendientes inmediatos
 
 1. Estimación formal P1 (pasos 1-3 del tex) + validación por simulación.
