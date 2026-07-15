@@ -20,6 +20,16 @@ solving.json
 convergence.txt
 convergence.png
 
+# Artefactos de LaTeX (regenerables; el pdf se compila localmente)
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.bbl
+*.blg
+*.toc
+notes/*.pdf
+
 # Sistema
 .DS_Store
 nohup.out
