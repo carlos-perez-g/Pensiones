@@ -114,6 +114,15 @@ duración) — datos y modelo (script 11/13, meses_futuros_60m.csv):
   cotizaciones está validado de una forma que el estudio de la SP (no
   público) no puede exhibir.
 
+- **Dos rutas al mismo aporte** (2026-07-22): a los 40 años, los flujos
+  esperados de cotización de los tipos II y III son casi idénticos
+  (hombres: 10,7 vs 10,7 UF/año; mujeres: 6,3 vs 6,2) por productos
+  opuestos — el II por precio (salario 15,5/12,1 UF, densidad 0,58/0,43),
+  el III por cantidad (salario 23,8/22,3 UF, densidad 0,37/0,23). Mismo
+  aporte medio, riesgos opuestos: goteo estable y predecible (II) vs
+  bloques que pueden cortarse para siempre (III). Un glide path uniforme
+  no puede distinguirlos; un optimizador no debería tratarlos igual.
+
 ## Cautelas (no sobre-argumentar)
 
 - Para deciles altos (sin PGU, alta densidad) la propuesta de la SP puede
