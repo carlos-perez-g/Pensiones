@@ -453,3 +453,9 @@ empeora la cola baja a 0,129 (por eso se descarta como canónico).
   regenerable, se puede borrar.
 - Robustez subperíodo de hazards sigue basada en S0 (celdas gruesas);
   re-verificación bajo bins extendidos queda como pendiente menor.
+- Autocorrelación de densidad anual añadida como test limpio (datos
+  0,842/0,733 en rezagos 1/2 vs modelo 0,825/0,700) y párrafo en el tex
+  distinguiendo momentos de consistencia vs validación estricta (la U
+  participó en la selección de basin). Script 13: branch S0 lee respaldos
+  _s0v1 de tipos/cond. iniciales (la comparación S0 válida es la de
+  validacion_momentos_s2.csv, pre-adopción).

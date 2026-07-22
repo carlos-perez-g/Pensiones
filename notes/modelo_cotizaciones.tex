@@ -415,6 +415,20 @@ especificación truncada en $\bar D = 24$ y las duraciones extendidas la
 reducen a 1,7; se tendrá presente al interpretar los resultados del modelo
 de ciclo de vida.
 
+Una precisión sobre el estatus de estos momentos. Todos son externos a la
+verosimilitud, pero no todos son ajenos a toda decisión: la distribución de
+densidades individuales participó en la selección entre óptimos locales del
+EM (Paso 1), y las curvas de supervivencia y los momentos prospectivos
+guiaron la elección de la especificación de duración, de modo que su papel
+aquí es de consistencia y no de validación ciega. Permanecen fuera de toda
+decisión de estimación o especificación —y constituyen por tanto la
+validación estricta— la densidad por edad y sexo, el número de episodios de
+laguna por individuo, la mediana de duración de lagunas y la
+autocorrelación de la densidad anual; esta última es el test más exigente
+de la dinámica de mediano plazo y el modelo la reproduce con leve
+sub-persistencia (0,825 vs.\ 0,842 al primer rezago), consistente con la
+heterogeneidad intra-tipo residual discutida en las limitaciones.
+
 \begin{table}[htbp]
 \centering
 \caption{Momentos no utilizados en la estimación: datos vs.\ modelo}
@@ -433,6 +447,8 @@ Duración de lagunas: mediana (meses)    & 3     & 3     \\
 \quad media                             & 11,3  & 11,5  \\
 \quad p90                               & 27    & 28    \\
 Episodios de laguna por individuo       & 7,6   & 7,4   \\
+Autocorr.\ densidad anual: rezago 1     & 0,842 & 0,825 \\
+\quad rezago 2                          & 0,733 & 0,700 \\
 \bottomrule
 \end{tabular}
 \end{table}

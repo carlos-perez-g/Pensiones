@@ -60,8 +60,14 @@ def age_bin(e):
 
 print('Cargando insumos...', flush=True)
 panel = pd.read_pickle(PROC / 'panel_mensual.pkl')[['pid', 't', 'edad', 'sexo', 'cot']]
-tipos0 = pd.read_csv(PROC / 'tipos_por_pid.csv', index_col=0)
-ci0 = pd.read_csv(PROC / 'cond_iniciales.csv').set_index(['sexo', 'tipo'])
+# Tras la adopción (script 14) los canónicos son S2; el branch S0 debe usar
+# los respaldos _s0v1 (tipos y condiciones iniciales) si existen.
+_t0 = PROC / 'tipos_por_pid_s0v1.csv'
+tipos0 = pd.read_csv(_t0 if _t0.exists() else PROC / 'tipos_por_pid.csv',
+                     index_col=0)
+_c0 = PROC / 'cond_iniciales_s0v1.csv'
+ci0 = pd.read_csv(_c0 if _c0.exists() else PROC / 'cond_iniciales.csv'
+                  ).set_index(['sexo', 'tipo'])
 post2 = pd.read_csv(EMS2 / 'posteriores_tipos_s2.csv').set_index('pid')
 em2 = {g: np.load(EMS2 / f'em_s2_{g}.npz') for g in ['M', 'F']}
 
@@ -81,6 +87,19 @@ def momentos(df, fuente):
     di = ob.groupby('pid').agg(dens=('cot', 'mean'), n=('cot', 'size'),
                                sexo=('sexo', 'first'))
     di = di[di['n'] >= 60]
+    # autocorrelación de la densidad ANUAL (años calendario completos en
+    # ventana): test limpio — no usado en estimación ni en ninguna
+    # selección de especificación o de basin.
+    py = (df.groupby(['pid', 'anio'], observed=True)['cot']
+          .agg(['mean', 'size']).reset_index()
+          .rename(columns={'mean': 'dens', 'size': 'n'}))
+    py = py[py['n'] >= 12]
+    ac = {}
+    for lag in [1, 2]:
+        l = py[['pid', 'anio', 'dens']].copy()
+        l['anio'] += lag
+        mm = py.merge(l, on=['pid', 'anio'], suffixes=('', '_l'))
+        ac[lag] = mm['dens'].corr(mm['dens_l'])
     sp = (df['cot'] != df.groupby('pid')['cot'].shift()).cumsum()
     dur = df.groupby(sp).agg(cot=('cot', 'first'), dur=('cot', 'size'),
                              pid=('pid', 'first'))
@@ -96,9 +115,12 @@ def momentos(df, fuente):
             'share_gt90': (di['dens'] > .90).mean(),
             'gap_mediana': gaps.median(), 'gap_media': gaps.mean(),
             'gap_p90': gaps.quantile(.9),
-            'n_lagunas_por_persona': nlag.mean()}, di, dens_edad
+            'n_lagunas_por_persona': nlag.mean(),
+            'autocorr_dens_anual_l1': ac[1],
+            'autocorr_dens_anual_l2': ac[2]}, di, dens_edad
 
 real_df = panel.rename(columns={'t': 'mes'})
+real_df['anio'] = 1900 + real_df['mes'] // 12
 m_real, di_r, de_r = momentos(real_df, 'datos')
 del panel, real_df
 
@@ -162,6 +184,7 @@ def simula(lam_arr, tipo_col, p0v, modo):
     df['cot'] = cot[alive_any]
     df['edad'] = info['e0'].reindex(df['pid']).values + df['mes'] // 12
     df['sexo'] = info['sexo'].reindex(df['pid']).values
+    df['anio'] = 1900 + (info['t0'].reindex(df['pid']).values + df['mes']) // 12
     return momentos(df, modo)
 
 print('Simulando S0...', flush=True)
