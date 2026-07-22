@@ -523,3 +523,12 @@ empeora la cola baja a 0,129 (por eso se descarta como canónico).
   sobre cambios (valor de opción de pensionarse); purgarla exigiría
   endogenizar participación (fuera de alcance, Supuesto 1). Exclusión del
   tramo 60+ femenino respaldada por ambos flancos.
+- Decisión (pregunta de Carlos): observaciones femeninas 60+ EXCLUIDAS de la
+  muestra de estimación salarial (no solo del uso del perfil) — evita
+  filtración residual vía efectos de año, varianzas y within que cruza 60.
+  Cambios mínimos (ρ F-III 0,54; hombres idénticos). Para PARTICIPACIÓN se
+  mantienen: consistencia interna de la validación sobre ventanas reales,
+  las transiciones propias clasifican al individuo, y los hazards F 60-65
+  no serán consumidos por P2 (retiro a los 60 como base — decisión de
+  diseño P2 pendiente). Declarado en tex: el corte en 60 es aproximación
+  (anticipada pre-60 y hombres 60-64 tienen selección suave análoga).

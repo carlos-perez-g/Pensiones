@@ -60,6 +60,11 @@ val = panel[(panel['cot'] == 1) & panel['tipo'].notna()
             & (panel['tope'] == 0) & (panel['tiene_subsidio'] == 0)
             & (panel['mismo_pagador_rep'] == 0)
             & (panel['rem_uf'] > 0)].copy()
+# Exclusión muestral (2026-07-22): observaciones femeninas sobre los 60
+# (edad legal de pensión) FUERA de la estimación salarial — triple selección
+# (censura en solicitud + participación + pre-tendencias); ver tex Paso 3.
+# El perfil femenino se reporta hasta los 59.
+val = val[~((val['sexo'] == 'F') & (val['edad'] >= 60))]
 print(f"meses válidos: {len(val):,} (excluidos por tope: "
       f"{(panel['tope']==1).sum():,}; subsidio: "
       f"{((panel['cot']==1)&(panel['tiene_subsidio']==1)).sum():,}; "
@@ -165,6 +170,7 @@ print(vz.drop(columns=['cov2', 'cov3']).to_string(index=False), flush=True)
 
 pf = pd.DataFrame({f'{g}_{k}': perfiles[(g, k)] for g in ['M', 'F']
                    for k in ['bajo', 'medio', 'alto']}, index=edades)
+pf.loc[60:, [c for c in pf.columns if c.startswith('F_')]] = np.nan
 pf.round(4).to_csv(PROC / 'perfiles_salariales.csv')
 pcs = pd.DataFrame({f'{g}_{k}': perfiles_cs[(g, k)] for g in ['M', 'F']
                     for k in ['bajo', 'medio', 'alto']}, index=edades)
@@ -179,7 +185,10 @@ fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey=True)
 DISPLAY = {'bajo': 'tipo III', 'medio': 'intermitente (II)', 'alto': 'estable (I)'}
 for ax, g, gl in [(axes[0], 'M', 'Hombres'), (axes[1], 'F', 'Mujeres')]:
     for k in ['bajo', 'medio', 'alto']:
-        ax.plot(edades, np.exp(perfiles[(g, k)]), label=DISPLAY[k])
+        v = np.exp(perfiles[(g, k)]).astype(float)
+        if g == 'F':
+            v[edades >= 60] = np.nan     # excluido de la muestra (Paso 3)
+        ax.plot(edades, v, label=DISPLAY[k])
     ax.set_xlabel('Edad'); ax.set_title(f'Perfil edad-ingreso — {gl}')
     ax.legend(); ax.set_yscale('log')
 axes[0].set_ylabel('Remuneración imponible (UF/mes, nivel 2015-23)')

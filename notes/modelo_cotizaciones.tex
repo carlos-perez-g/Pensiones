@@ -348,9 +348,14 @@ $0{,}11$ vs.\ $0{,}08$) — lógica de valor de opción: se pensiona quien
 enfrenta perspectivas salariales pobres. Purgar esta segunda selección
 exigiría modelar conjuntamente el salario y la decisión de
 pensionarse/participar, fuera del alcance de esta nota (Supuesto~\ref{as:exo}).
-Por ambas razones el tramo femenino sobre los 60 se excluye del modelo. La
-brecha FE vs.\ transversal en el rango utilizado (20--59) es de 0,03--0,08
-log en promedio, salvo el tipo III femenino (0,14);
+Por ambas razones, las observaciones femeninas sobre los 60 años se
+excluyen de la \emph{muestra} de estimación salarial y el perfil femenino
+se reporta hasta los 59. La censura en la solicitud opera también, de forma
+mucho más suave, antes de los 60 (pensión anticipada) y en hombres de
+60--64; el corte en la edad legal femenina es una aproximación declarada,
+no una frontera exacta de la selección. La brecha FE vs.\ transversal en el
+rango utilizado (20--59) es de 0,03--0,08 log en promedio, salvo el tipo
+III femenino (0,14);
 (ii) $\rho_{k,g}$, $\sigma^2_{\eta,k,g}$ y $\sigma^2_{\varepsilon,k,g}$ por GMM sobre
 autocovarianzas de los residuos en frecuencia anual (promedio de meses
 cotizados del año), siguiendo la práctica estándar para separar componente
@@ -487,16 +492,16 @@ sugieren $\rho \approx 0{,}45$; es el grupo con menos persona--año y mayor
 error de medición por promediar pocos meses cotizados). Un dividendo de la
 clasificación EM: bajo terciles, el grupo femenino del tipo III era inestimable
 (6.242 persona--año y selección severa); con tipos EM reúne 16.380
-persona--año y sus parámetros son regulares ($\rho = 0{,}55$), eliminando la
+persona--año y sus parámetros son regulares ($\rho = 0{,}54$), eliminando la
 necesidad de agrupación ad hoc.
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{../output/calibration/fig10_perfiles_edad_ingreso.png}
 \caption{Perfiles edad--ingreso $\exp(\hat m_{k,g}(a))$ por tipo y sexo, en
-UF mensuales al nivel 2015--2023 (escala log). El tramo femenino sobre los 60
-años refleja selección post edad legal de retiro y no se utiliza en el
-modelo.}
+UF mensuales al nivel 2015--2023 (escala log). El perfil femenino se estima
+y reporta hasta los 59 años: sobre esa edad la muestra está seleccionada
+por la censura en la solicitud de pensión (véase el Paso 3).}
 \label{fig:perfiles}
 \end{figure}
 
