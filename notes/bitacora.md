@@ -551,3 +551,24 @@ empeora la cola baja a 0,129 (por eso se descarta como canónico).
   esperados de cotización II≈III (H: 10,7/10,7; M: 6,3/6,2 UF/año) por
   productos opuestos precio×cantidad. La suavidad del perfil del tipo I en
   fig10 es precisión muestral (127k py) + menor σ²_ε real; distinguir ambas.
+
+### Pendientes de reproducibilidad y auditoría (anotados 2026-07-22, para después del 31-jul)
+
+1. **Paquete de reproducibilidad Python** (~media sesión): orquestador
+   run_all.py con la cadena canónica y verificación de insumos (ojo: 13
+   requiere respaldos _s0v1 que crea 14); requirements.txt con versiones
+   congeladas (pandas 3.0.2, numpy 2.4.4); REPRODUCIBILITY.md (qué pedir a
+   la SP, orden, ~1h de corrida); modo check que compara outputs contra los
+   CSV comiteados con tolerancia. Documentar reproducción del basin warm
+   sin la cadena S0: la inicialización por terciles converge al mismo basin
+   (verificado en 12b, init 0).
+2. **Verificación independiente en R** (~1 sesión; decidido ESTO en lugar
+   de un port completo): script/Rmd que recompute desde los datos crudos la
+   batería clave (densidad, celdas y hazards, U, perfiles salariales con
+   regresión propia, pi, momentos de validación) y compare contra los CSV
+   del repo con tolerancia. Racional: una reimplementación en otro lenguaje
+   detecta errores de código que re-correr el mismo código no puede;
+   permite a Carlos auditar en R. Port completo descartado por doble
+   mantenimiento y porque el RNG distinto no replica bit a bit el EM
+   multimodal (criterio correcto: tolerancia + identificación de basin,
+   no igualdad exacta).
