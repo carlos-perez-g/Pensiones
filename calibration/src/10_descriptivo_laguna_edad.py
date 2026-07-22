@@ -39,7 +39,7 @@ PROC = BASE / 'data' / 'processed'
 OUT = BASE / 'output' / 'calibration'
 OUT.mkdir(parents=True, exist_ok=True)
 
-DISPLAY = {'bajo': 'frágil', 'medio': 'intermitente', 'alto': 'estable'}
+DISPLAY = {'bajo': 'tipo III', 'medio': 'intermitente (II)', 'alto': 'estable (I)'}
 COLORES = {'bajo': 'C0', 'medio': 'C1', 'alto': 'C2'}
 N_MIN = 300          # persona-mes efectivos mínimos por celda para graficar
 EDADES = (18, 65)

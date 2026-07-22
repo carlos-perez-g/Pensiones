@@ -26,7 +26,7 @@ AGE_BINS = [(18, 24), (25, 29), (30, 34), (35, 39), (40, 44),
             (45, 49), (50, 54), (55, 59), (60, 65)]
 DMAX, H = 240, 240
 LAB = ['bajo', 'medio', 'alto']
-DISPLAY = {'bajo': 'frágil', 'medio': 'intermitente', 'alto': 'estable'}
+DISPLAY = {'bajo': 'tipo III', 'medio': 'intermitente (II)', 'alto': 'estable (I)'}
 COL = {'bajo': 'C0', 'medio': 'C1', 'alto': 'C2'}
 
 def age_bin(e):

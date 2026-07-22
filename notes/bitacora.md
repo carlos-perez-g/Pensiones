@@ -463,3 +463,30 @@ empeora la cola baja a 0,129 (por eso se descarta como canónico).
   comentario (composición por tipo, extinción del capital humano
   previsional, sesgo del truncamiento, U y piso PGU, exhibits candidatos,
   cautelas). Mantener actualizado al avanzar P2.
+
+### Nomenclatura de tipos v2 y firma dinámica (decidido Carlos, 2026-07-22)
+
+- **Nueva nomenclatura**: estable (tipo I), intermitente (tipo II) y
+  **tipo III sin nombre** — deliberadamente: su firma es bimodal en ambos
+  estados y cualquier etiqueta de nivel ("frágil") induce a leer un
+  resultado donde hay una dinámica. Claves internas bajo/medio/alto sin
+  cambios; DISPLAY actualizado en scripts 06/10/14/15/16 y figuras
+  regeneradas (fig8-11, 15, 20, 21, 21b).
+- **Marco de presentación 2x2** (propuesto por Carlos leyendo fig21):
+  persistencia alta/baja por estado. I = alta-baja, II = baja-baja,
+  III = baja-alta en el episodio típico. Capa 2 (colas): el empleo del III
+  tiene cola 4-6x la del II y por length-bias concentra 72-75% de sus meses
+  cotizados en empleos de 5+ años (igual que el I) → polarización.
+- **La cuarta esquina (alta-alta) existe en hombres**: con K=4 emerge como
+  clase del 27% (cola de empleo a nivel del I, lagunas más persistentes que
+  el III de K=3) y la esquina baja-alta pura casi se vacía → el tipo III
+  masculino es un compuesto. En mujeres K=4 solo da la clase degenerada de
+  2,5%: el III femenino sí es el espejo del I. K=3 se mantiene como base
+  (ICL, asimetría entre sexos, comparabilidad); K=4 masculino pasa a
+  robustez obligatoria.
+- Tex: nueva subsección "La firma dinámica de los tipos" (fig21 promovida,
+  2x2, length-bias, párrafo K=4) + subsección "El proceso de remuneraciones
+  estimado" + nomenclatura I/II/III en todo el documento. Compilar
+  localmente (sin LaTeX en sandbox).
+- ideas_glidepath.md usa aún la etiqueta "frágil" en el cuerpo: léase
+  tipo III (nota añadida al inicio).

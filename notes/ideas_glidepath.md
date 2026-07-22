@@ -1,5 +1,9 @@
 # Ideas para el glide path (insumos de P1 → P2 y comentario a la SP)
 
+> Nomenclatura (2026-07-22): estable = tipo I, intermitente = tipo II; lo que
+> este documento llama "frágil" es ahora el **tipo III** (sin nombre; ver
+> bitácora y sec. "La firma dinámica de los tipos" del tex).
+
 Registro de hallazgos de la calibración P1 que alimentan el diseño del
 modelo de ciclo de vida (P2) y la crítica al Régimen de Inversión de los
 Fondos Generacionales. Cada punto cita su fuente (script / figura / tabla).

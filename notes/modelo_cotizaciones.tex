@@ -73,10 +73,16 @@ El tiempo es discreto y mensual, $t = 1, 2, \dots$; el individuo $i$ entra al
 sistema en el mes de su afiliación y se caracteriza por su sexo $g_i$ y un
 \emph{tipo} permanente $k_i \in \{1,\dots,K\}$ con probabilidades
 poblacionales $\pi_{k|g}$ \emph{condicionales al sexo}. Los tipos se
-denominan por su dinámica de participación —adhesión \emph{frágil},
-\emph{intermitente} y \emph{estable}— ordenados por densidad posterior
-media; las etiquetas describen patrones de transición, no tramos de densidad
-(véase el Paso 1 de la Sección~\ref{sec:estimacion}). Todo el modelo se
+denominan \emph{estable} (tipo I), \emph{intermitente} (tipo II) y
+\emph{tipo III}, en orden decreciente de densidad posterior media. Los dos
+primeros llevan nombre porque su firma dinámica admite un resumen de una
+frase; el tercero se deja deliberadamente sin nombre: su firma es bimodal
+en ambos estados —combina las lagunas más persistentes de la población con
+una minoría de empleos muy largos que concentra la mayor parte de sus meses
+cotizados— y cualquier etiqueta de nivel (``frágil'', ``de baja
+densidad'') induciría a leer un resultado donde lo que hay es una dinámica
+(Sección~\ref{sec:firmas}). Las etiquetas describen patrones de transición,
+no tramos de densidad. Todo el modelo se
 especifica y estima separadamente por sexo: las brechas observadas (densidad
 mediana de vida de 0,644 en hombres vs.\ 0,457 en mujeres; brecha de densidad
 por edad creciente de 12 a 20 puntos porcentuales entre los 25 y los 64
@@ -132,7 +138,7 @@ tipo$\times$duración es el objeto central —capturar cuánta memoria de
 duración sobrevive dentro de tipo— y la interacción
 duración$\times$macro-tramo permite que esa memoria cambie a lo largo del
 ciclo de vida: la restricción de separabilidad edad--duración falla de
-forma económicamente relevante justo en el tipo frágil a edades altas
+forma económicamente relevante justo en el tipo III a edades altas
 (hasta 10 puntos porcentuales en la probabilidad de seguir en laguna a
 cinco años), donde las lagunas se vuelven cuasi-absorbentes.
 
@@ -269,13 +275,14 @@ mujeres queda esencialmente empatado entre $K=2$ y $K=4$ (11 puntos sobre
 $1{,}06$ millones) con $K=3$ cercano; el $K=4$ femenino solo agrega una
 clase degenerada de 2,5\%. Se adopta $K=3$ como especificación base en
 ambos sexos ($K=2$ y $K=4$ como robustez). Las proporciones estimadas son
-desiguales ($\hat\pi_{k|g}$, orden frágil/intermitente/estable: hombres
-0,34/0,18/0,48; mujeres 0,34/0,14/0,53). La clasificación dura por
+desiguales ($\hat\pi_{k|g}$: tipo I 0,48 y 0,53; tipo II 0,18 y 0,14;
+tipo III 0,34 y 0,34, para hombres y mujeres respectivamente). La
+clasificación dura por
 terciles de densidad —usada como inicialización y robustez— coincide con
 el tipo modal EM en los polos pero no en el centro: el EM agrupa por
 \emph{dinámica} de los hazards y no por densidad bruta, y reasigna una
-fracción sustancial del tercil medio de densidad al tipo estable. Por lo
-mismo, el tipo frágil no equivale a ``casi no cotiza'': sus densidades
+fracción sustancial del tercil medio de densidad al tipo I. Por lo
+mismo, el tipo III no equivale a ``casi no cotiza'': sus densidades
 posteriores medias son 0,33 (hombres) y 0,26 (mujeres). Menos de la mitad
 de los individuos exhibe posterior modal superior a 0,9, lo que desaconseja
 la clasificación dura como especificación principal.
@@ -363,6 +370,66 @@ sobre tramos de edad con pesos muestrales.}
 \label{fig:hazfit}
 \end{figure}
 
+\subsection{La firma dinámica de los tipos}
+\label{sec:firmas}
+
+La Figura~\ref{fig:firmas} traduce los hazards a su objeto interpretable:
+la probabilidad de que un episodio de empleo o de laguna, iniciado a los 30
+años, sobreviva más de $d$ meses. El primer orden de la estructura es una
+dicotomía de persistencia alta/baja en cada estado, que ubica a los tipos
+en tres esquinas de un espacio dos por dos. El tipo I (estable) es
+persistencia alta en empleo y baja en laguna: empleos con mediana de 14
+meses (hombres) y 10 (mujeres), más de un quinto sobre los cinco años, y
+lagunas con mediana de 3 meses. El tipo II (intermitente) es persistencia
+baja en ambos estados, con colas delgadas: episodios de 3--4 meses de
+mediana y $\Prob(\text{episodio} > 5\text{ años})$ inferior al 4\% en ambos
+estados, lo que —por promediación sobre muchos episodios— comprime sus
+densidades de vida hacia el centro de la distribución. El tipo III combina
+empleos de mediana corta (3 meses) con las lagunas más persistentes de la
+población (mediana de 10 meses en hombres y 22 en mujeres;
+$\Prob(>5\text{ años})$ de 0,14 y 0,31).
+
+El segundo orden está en las colas, y es lo que hace al tipo III resistente
+a cualquier etiqueta de nivel. Aunque su empleo mediano es tan corto como
+el del tipo II, su cola de empleo es cuatro a seis veces más gruesa
+($\Prob(>5\text{ años}) \approx 0{,}09$--$0{,}10$), y por sesgo de longitud
+esos empleos largos concentran el 72--75\% de sus meses efectivamente
+cotizados —la misma proporción que en el tipo I—. El resultado es
+polarización: el tipo III genera tanto vidas de densidad casi nula como
+vidas casi completas. Es además el único tipo cuya firma cambia
+sustancialmente con la edad, con asimetría por sexo: en hombres,
+$\Prob(\text{laguna nueva} > 5\text{ años})$ sube de 0,14 a los 30 a 0,25
+a los 50; en mujeres, la laguna más persistente es la iniciada a los 30
+—consistente con interrupciones en edad de crianza que no se revierten—.
+
+La cuarta esquina del espacio —persistencia alta en ambos estados— no está
+vacía sino escondida. Re-estimando el mixture con $K=4$, en hombres esa
+esquina emerge como una clase del 27\% (cola de empleo al nivel del tipo I;
+lagunas aún más persistentes que las del tipo III con $K=3$) y la esquina
+de empleo corto con laguna larga casi se vacía: el tipo III masculino es en
+buena medida un compuesto de carreras largas que terminan en salidas
+prolongadas o definitivas. En mujeres, en cambio, $K=4$ no produce esa
+esquina (solo una clase degenerada de 2,5\%): el tipo III femenino sí es
+el espejo del tipo I. No se adopta $K=4$ como especificación base por tres
+razones: el ICL prefiere $K=3$ también en hombres, la estructura de cuatro
+tipos no existe en ambos sexos, y la comparabilidad entre sexos es central
+para el uso de política del proceso. El costo de esa decisión
+—heterogeneidad residual dentro del tipo III— queda declarado y
+cuantificado (momentos prospectivos y colas de la validación), y la
+especificación masculina con $K=4$ se reporta como robustez.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{../output/calibration/fig21_firmas_tipos.png}
+\caption{La firma de cada tipo: probabilidad de que un episodio de empleo
+(izquierda) o de laguna (derecha) sobreviva más de $d$ meses, para
+episodios iniciados a los 30 años (líneas llenas) y a los 50 (punteadas),
+según los hazards estimados. Escala horizontal logarítmica.}
+\label{fig:firmas}
+\end{figure}
+
+\subsection{El proceso de remuneraciones estimado}
+
 La Figura~\ref{fig:perfiles} presenta los perfiles edad--ingreso anclados a
 2015--2023. Los efectos de período absorbieron un crecimiento común de
 2,7--4,0\% anual —superior al índice agregado de remuneraciones reales, lo
@@ -370,7 +437,7 @@ que refleja composición del empleo formal— y que en el modelo de ciclo de
 vida entrará como el parámetro $g$. Las varianzas anuales (netas del efecto
 fijo individual) arrojan $\rho \in [0{,}50,\ 0{,}68]$ y
 $\sigma^2_\eta \in [0{,}05,\ 0{,}09]$ en los seis grupos. Un dividendo de la
-clasificación EM: bajo terciles, el grupo mujer--frágil era inestimable
+clasificación EM: bajo terciles, el grupo femenino del tipo III era inestimable
 (6.242 persona--año y selección severa); con tipos EM reúne 16.380
 persona--año y sus parámetros son regulares ($\rho = 0{,}65$), eliminando la
 necesidad de agrupación ad hoc.
@@ -385,12 +452,12 @@ modelo.}
 \label{fig:perfiles}
 \end{figure}
 
-El ordenamiento no monótono de la Figura~\ref{fig:perfiles} —el tipo frágil
-exhibe remuneraciones observadas iguales o superiores a las del estable, y
-el intermitente muy inferiores a ambos— es informativo y esperable: la
+El ordenamiento no monótono de la Figura~\ref{fig:perfiles} —el tipo III
+exhibe remuneraciones observadas iguales o superiores a las del tipo I, y
+el tipo II muy inferiores a ambos— es informativo y esperable: la
 remuneración solo se observa \emph{condicional a cotizar}. Para el tipo
-intermitente, la alta rotación y la baja remuneración son el mismo fenómeno
-(empleos formales cortos y mal pagados). Para el tipo frágil, los escasos
+II, la alta rotación y la baja remuneración son el mismo fenómeno
+(empleos formales cortos y mal pagados). Para el tipo III, los escasos
 meses cotizados son una muestra seleccionada de sus mejores estados (lógica
 de salario de reserva), selección que se intensifica con la edad. Esta
 selección no sesga el uso del proceso en el modelo de ciclo de vida —la

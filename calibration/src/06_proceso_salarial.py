@@ -137,10 +137,10 @@ ef.round(4).to_csv(OUT / 'efectos_anio.csv')
 
 # ---------------- figuras
 fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey=True)
-DISPLAY = {'bajo': 'frágil', 'medio': 'intermitente', 'alto': 'estable'}
+DISPLAY = {'bajo': 'tipo III', 'medio': 'intermitente (II)', 'alto': 'estable (I)'}
 for ax, g, gl in [(axes[0], 'M', 'Hombres'), (axes[1], 'F', 'Mujeres')]:
     for k in ['bajo', 'medio', 'alto']:
-        ax.plot(edades, np.exp(perfiles[(g, k)]), label=f'adhesión {DISPLAY[k]}')
+        ax.plot(edades, np.exp(perfiles[(g, k)]), label=DISPLAY[k])
     ax.set_xlabel('Edad'); ax.set_title(f'Perfil edad-ingreso — {gl}')
     ax.legend(); ax.set_yscale('log')
 axes[0].set_ylabel('Remuneración imponible (UF/mes, nivel 2015-23)')

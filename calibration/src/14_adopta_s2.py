@@ -40,7 +40,7 @@ AGE_BINS = [(18, 24), (25, 29), (30, 34), (35, 39), (40, 44),
 nD, nA = len(DUR_BINS), len(AGE_BINS)
 DMAX = 240
 LAB = ['bajo', 'medio', 'alto']
-DISPLAY = {'bajo': 'frágil', 'medio': 'intermitente', 'alto': 'estable'}
+DISPLAY = {'bajo': 'tipo III', 'medio': 'intermitente (II)', 'alto': 'estable (I)'}
 
 def bin_idx(vals, bins):
     out = np.full(len(vals), -1, dtype=np.int16)
@@ -129,7 +129,7 @@ for s, fname, ttl in [(0, 'fig8_ajuste_hazard_laguna.png', 'Salida de laguna'),
             wts = wts / max(wts.sum(), 1)
             fitted = lam_all[(g, k, s)] @ wts
             xs = [REP.get(i, np.mean(DUR_BINS[i])) for i in range(nD)]
-            ax.plot(xs, fitted, '-', color=col, label=f'adhesión {DISPLAY[k]}')
+            ax.plot(xs, fitted, '-', color=col, label=DISPLAY[k])
         ax.set_xscale('log')
         ax.set_xticks([1, 3, 6, 12, 24, 48, 96, 150])
         ax.set_xticklabels(['1', '3', '6', '12', '24', '48', '96', '120+'])

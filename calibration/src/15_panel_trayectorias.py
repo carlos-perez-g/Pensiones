@@ -28,7 +28,7 @@ DMAX, EDAD_FIN = 240, 65
 NPP = 10
 SEED = 20260722
 LAB = ['bajo', 'medio', 'alto']
-DISPLAY = {'bajo': 'frágil', 'medio': 'intermitente', 'alto': 'estable'}
+DISPLAY = {'bajo': 'tipo III', 'medio': 'intermitente (II)', 'alto': 'estable (I)'}
 COL = {'bajo': 'C0', 'medio': 'C1', 'alto': 'C2'}
 
 def age_bin(e):
@@ -85,7 +85,7 @@ for i, (g, gl) in enumerate([('M', 'Hombres'), ('F', 'Mujeres')]):
         ax.set_ylim(0, NPP)
         ax.set_xlim(18, EDAD_FIN + 4)
         ax.set_yticks([])
-        ax.set_title(f'{gl} — adhesión {DISPLAY[k]}', fontsize=10)
+        ax.set_title(f'{gl} — {DISPLAY[k]}', fontsize=10)
         if i == 1:
             ax.set_xlabel('Edad')
 fig.suptitle('Vidas laborales simuladas (modelo S2): cada fila una persona; '
