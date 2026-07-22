@@ -459,3 +459,7 @@ empeora la cola baja a 0,129 (por eso se descarta como canónico).
   participó en la selección de basin). Script 13: branch S0 lee respaldos
   _s0v1 de tipos/cond. iniciales (la comparación S0 válida es la de
   validacion_momentos_s2.csv, pre-adopción).
+- Creado notes/ideas_glidepath.md: hallazgos de P1 relevantes para P2 y el
+  comentario (composición por tipo, extinción del capital humano
+  previsional, sesgo del truncamiento, U y piso PGU, exhibits candidatos,
+  cautelas). Mantener actualizado al avanzar P2.
