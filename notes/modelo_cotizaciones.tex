@@ -43,10 +43,14 @@ inferior a 0,10 y 16,5\% superior a 0,90.
 densidad, la probabilidad mensual de reingreso desde una laguna varía en un
 factor de 8 entre grupos (0,023 vs.\ 0,178) y la persistencia mensual en
 cotización va de 0,837 a 0,977.
-\item \textbf{Dependencia de duración genuina.} Los hazards de salida de
-ambos estados decrecen fuertemente con la duración del episodio
-\emph{dentro de cada grupo de adhesión} (razón entre el hazard a 1--3 meses y
-a 19--24 meses de entre 4 y 8), y se aplanan pasados 15--20 meses. La
+\item \textbf{Dependencia de duración genuina y de muy largo alcance.} Los
+hazards de salida de ambos estados decrecen fuertemente con la duración del
+episodio \emph{dentro de cada grupo de adhesión} (razón entre el hazard a
+1--3 meses y a 19--24 meses de entre 4 y 8), y la caída \emph{continúa} en
+duraciones largas: el hazard de reingreso cae en un factor adicional de
+$\sim$5 entre los 24 meses y los 120+ meses de laguna, a toda edad. Las
+lagunas muy largas no son marginales: a los 50--65 años, la celda de
+lagunas de más de 120 meses es la más poblada del estado laguna. La
 dependencia de duración no es, por tanto, un artefacto de composición,
 aunque la heterogeneidad también es de primer orden.
 \item \textbf{Ausencia de \emph{scarring} salarial.} El salario real de
@@ -87,8 +91,17 @@ y la duración en el estado corriente, truncada en $\bar D$ meses, es
 d_{it} = \min\bigl\{\#\{\tau \le t : s_{i\tau'} = s_{it} \ \forall \tau' \in
 [\tau, t]\},\ \bar D\bigr\}.
 \]
-El truncamiento se justifica empíricamente por el aplanamiento de los hazards
-(hecho 3); como referencia inicial, $\bar D = 24$.
+La duración entra en los hazards a través de una función escalonada sobre
+los tramos $\mathcal{D} = \{1, \dots, 12, 13\text{--}18, 19\text{--}23,
+24\text{--}35, 36\text{--}59, 60\text{--}119, 120+\}$, constante dentro de
+cada tramo y desde los 120 meses ($\bar D = 240$ como tope operativo de la
+simulación). Los tramos finos hasta el año y gruesos después equilibran la
+resolución donde la caída del hazard es rápida (hecho 3) con el tamaño de
+las celdas; una versión anterior truncaba en $\bar D = 24$ bajo el supuesto
+de hazard plano desde los dos años, supuesto que los datos rechazan (el
+hazard sigue cayendo un factor de $\sim$5 hasta los 120+ meses) y cuya
+corrección resultó cuantitativamente importante para las cotizaciones
+esperadas a edades altas.
 
 \subsection{Hazards de transición}
 
@@ -101,19 +114,27 @@ d_{it} = d,\ a_{it} = a,\ k_i = k,\ g_i = g\right), \\
 \lambda^{10}_{k,g}(d, a) &= \Prob\left(s_{i,t+1} = 0 \mid s_{it} = 1,\
 d_{it} = d,\ a_{it} = a,\ k_i = k,\ g_i = g\right).
 \end{align}
-Se especifican como logits:
+Se especifican como logits con perfiles de duración específicos al
+macro-tramo de edad $B(a) \in \{18\text{--}34,\ 35\text{--}49,\
+50\text{--}65\}$:
 \begin{equation}
-\lambda^{sr}_{k,g}(d, a) = \Lambda\bigl(\alpha^{sr}_{k,g} + f^{sr}_{k,g}(d) +
-h^{sr}_{g}(a)\bigr), \qquad \Lambda(x) = \frac{e^x}{1+e^x},
+\lambda^{sr}_{k,g}(d, a) = \Lambda\bigl(\alpha^{sr}_{k,g,B(a)} +
+f^{sr}_{k,g,B(a)}(d) + h^{sr}_{k,g}(a)\bigr), \qquad
+\Lambda(x) = \frac{e^x}{1+e^x},
 \label{eq:logit}
 \end{equation}
-donde $\alpha^{sr}_{k,g}$ es el intercepto específico al tipo, sexo y estado
-de origen, $f^{sr}_{k,g}(\cdot)$ es una función escalonada de la duración
-(indicadores para $d = 1,\dots,12$ y tramos $13$--$18$, $19$--$23$ y
-$\ge \bar D$, constante desde $\bar D$) y $h^{sr}_{g}(\cdot)$ una función
-escalonada en tramos quinquenales de edad. La interacción completa
-tipo$\times$duración en $f^{sr}_{k,g}$ es el objeto central: capturar cuánta
-memoria de duración sobrevive dentro de tipo.
+donde $\alpha^{sr}_{k,g,B}$ es el intercepto específico al tipo, sexo,
+estado de origen y macro-tramo, $f^{sr}_{k,g,B}(\cdot)$ es la función
+escalonada de la duración sobre los tramos $\mathcal{D}$, y
+$h^{sr}_{k,g}(\cdot)$ una función escalonada en tramos quinquenales de edad
+(anidados en los macro-tramos, como controles de nivel). La interacción
+tipo$\times$duración es el objeto central —capturar cuánta memoria de
+duración sobrevive dentro de tipo— y la interacción
+duración$\times$macro-tramo permite que esa memoria cambie a lo largo del
+ciclo de vida: la restricción de separabilidad edad--duración falla de
+forma económicamente relevante justo en el tipo frágil a edades altas
+(hasta 10 puntos porcentuales en la probabilidad de seguir en laguna a
+cinco años), donde las lagunas se vuelven cuasi-absorbentes.
 
 \begin{assumption}[Exogeneidad del proceso de participación]
 \label{as:exo}
@@ -128,8 +149,10 @@ es, si acaso, conservador para nuestro propósito de política.
 \subsection{Representación markoviana en el estado ampliado}
 
 Definiendo el estado ampliado $x_{it} = (s_{it}, d_{it}) \in \mathcal{X}$ con
-$|\mathcal{X}| = 2\bar D$, el proceso es Markov de primer orden condicional a
-$(k, a, g)$, con kernel
+$|\mathcal{X}| = 2\bar D$ (o, de forma equivalente y más compacta para la
+programación dinámica, sobre los tramos de duración $\mathcal{D}$ con un
+contador de meses dentro del tramo), el proceso es Markov de primer orden
+condicional a $(k, a, g)$, con kernel
 \begin{equation}
 P_{k,g,a}\bigl((s,d) \to (s', d')\bigr) =
 \begin{cases}
@@ -238,31 +261,55 @@ estadístico suficiente individual son sus conteos por celda
 estado$\times$duración$\times$edad. El paso E entrega probabilidades
 posteriores de tipo; el paso M re-estima los logits \eqref{eq:logit} con
 pesos posteriores, junto con $\pi_{k|g}$ y las condiciones iniciales. $K$ se
-elige comparando $K=2,\dots,5$ por sexo: el BIC decrece monótonamente
-(sobre-selección esperable con cientos de observaciones por individuo), el
-ICL —que penaliza clasificaciones difusas— alcanza su mínimo en $K=4$ para
-hombres por margen modesto y es esencialmente plano en $K=2$--$4$ para
-mujeres, y las ganancias de verosimilitud hacen codo en $K=3$--$4$. Se adopta
-$K=3$ como especificación base ($K=4$ masculino como robustez). Las
-proporciones estimadas son desiguales ($\hat\pi_{k|g}$, orden
-frágil/intermitente/estable: hombres 0,36/0,21/0,43; mujeres
-0,41/0,16/0,43). La clasificación dura por terciles de densidad —usada como
-inicialización y robustez— coincide con el tipo modal EM en los polos
-($\sim$75\%) pero no en el centro: el EM agrupa por \emph{dinámica} de los
-hazards y no por densidad bruta, y reasigna casi la mitad del tercil medio
-de densidad al tipo estable. Por lo mismo, el tipo frágil no equivale a
-``casi no cotiza'': sus densidades medias son 0,37 (hombres) y 0,31
-(mujeres). Solo la mitad de los individuos exhibe posterior modal superior
-a 0,9, lo que desaconseja la clasificación dura como especificación
-principal.
+elige comparando $K=2,\dots,5$ por sexo bajo la especificación
+\eqref{eq:logit}: el BIC decrece monótonamente (sobre-selección esperable
+con cientos de observaciones por individuo), el ICL —que penaliza
+clasificaciones difusas— alcanza su mínimo en $K=3$ para hombres, y para
+mujeres queda esencialmente empatado entre $K=2$ y $K=4$ (11 puntos sobre
+$1{,}06$ millones) con $K=3$ cercano; el $K=4$ femenino solo agrega una
+clase degenerada de 2,5\%. Se adopta $K=3$ como especificación base en
+ambos sexos ($K=2$ y $K=4$ como robustez). Las proporciones estimadas son
+desiguales ($\hat\pi_{k|g}$, orden frágil/intermitente/estable: hombres
+0,34/0,18/0,48; mujeres 0,34/0,14/0,53). La clasificación dura por
+terciles de densidad —usada como inicialización y robustez— coincide con
+el tipo modal EM en los polos pero no en el centro: el EM agrupa por
+\emph{dinámica} de los hazards y no por densidad bruta, y reasigna una
+fracción sustancial del tercil medio de densidad al tipo estable. Por lo
+mismo, el tipo frágil no equivale a ``casi no cotiza'': sus densidades
+posteriores medias son 0,33 (hombres) y 0,26 (mujeres). Menos de la mitad
+de los individuos exhibe posterior modal superior a 0,9, lo que desaconseja
+la clasificación dura como especificación principal.
 
-\paragraph{Paso 2: hazards.} Logits \eqref{eq:logit} por tipo, sexo y estado
-de origen, con dummies de duración $\{1,\dots,12\}$, agrupación 13--18,
-19--24 y $\ge \bar D$, y spline cúbico en edad. Ponderación igual por
-observación persona--mes; errores estándar agrupados por individuo.
-Robustez temporal obligatoria: re-estimación por subperíodos (1990--2005 y
-2008--2023); ante inestabilidad estructural se privilegia el período
-reciente, que es el relevante para la proyección.
+Un punto metodológico que corresponde declarar: la verosimilitud del
+mixture es multimodal. En mujeres, una búsqueda multi-arranque encuentra un
+óptimo local alternativo con verosimilitud levemente superior
+($+64$ puntos sobre $523$ mil, un 0,01\%) que reorganiza la tipología —
+concentra el 62\% de las mujeres en una sola clase que mezcla dinámicas de
+adhesión estable con historias de densidad muy baja. Entre óptimos locales
+prácticamente empatados en verosimilitud, la selección se resolvió por
+momentos \emph{no utilizados} en la estimación (Sección de validación): la
+solución adoptada domina a la alternativa en todos los momentos de
+validación —en particular, la alternativa deteriora la cola baja de la
+distribución de densidades (0,129 contra 0,146, con 0,155 en los datos)— y
+la alternativa se reporta como robustez.
+
+\paragraph{Paso 2: hazards.} Logits \eqref{eq:logit} por tipo, sexo,
+estado de origen y macro-tramo de edad, con dummies de duración sobre los
+tramos $\mathcal{D}$ y tramos quinquenales de edad anidados; la estimación
+es el paso M del EM (MLE exacto sobre celdas agregadas ponderadas por
+posteriores, vía el estadístico suficiente). La especificación se
+seleccionó comparando alternativas anidadas (truncada en 24; duraciones
+extendidas aditiva; duraciones extendidas con macro-tramos) no por
+contrastes de razón de verosimilitud —que con $7{,}5$ millones de
+observaciones rechazan cualquier restricción— sino por su desempeño en los
+objetos que el modelo de ciclo de vida consume: curvas de supervivencia en
+laguna por edad de inicio y cotizaciones esperadas a 60 meses condicionales
+a (edad, estado, duración). La versión truncada en 24 sobreestimaba las
+cotizaciones esperadas de los afiliados de 55--59 años en laguna en 5 a 11
+meses (sobre niveles de 7 a 16); la especificación adoptada reduce ese
+error a 0,5--3 meses. Robustez temporal obligatoria: re-estimación por
+subperíodos (1990--2005 y 2008--2023); ante inestabilidad estructural se
+privilegia el período reciente, que es el relevante para la proyección.
 
 \paragraph{Paso 3: remuneraciones.} Con la submuestra $s_{it}=1$,
 excluyendo observaciones en el tope (flag administrativo), los meses cuya
@@ -283,8 +330,10 @@ estimado se simula (mensualmente, desde la edad de afiliación) y se contrasta
 con momentos \emph{no} usados en la estimación:
 distribución completa de densidades individuales (la forma de U),
 distribución de duración de lagunas completadas, densidad por edad y sexo,
-número de episodios de laguna por individuo a los 60 años, y autocorrelación
-de la densidad anual. La agregación mensual$\to$anual para el modelo de
+número de episodios de laguna por individuo a los 60 años, autocorrelación
+de la densidad anual, y —dado su papel en la selección de especificación—
+los momentos \emph{prospectivos}: meses cotizados efectivos en los 60 meses
+siguientes, condicionales a la celda (edad, estado, duración) de partida. La agregación mensual$\to$anual para el modelo de
 ciclo de vida se efectúa sobre estas mismas simulaciones, eligiendo la
 representación anual más parsimoniosa que preserve los momentos relevantes
 para la acumulación de saldo.
@@ -292,13 +341,13 @@ para la acumulación de saldo.
 \section{Resultados de la estimación}
 \label{sec:resultados}
 
-Con $K=3$ y $\bar D = 24$, los doce logits (2 sexos $\times$ 3 tipos
-$\times$ 2 estados) provienen del paso M del EM en el óptimo: celdas
-agregadas duración$\times$edad ponderadas por las probabilidades posteriores
-de tipo. La Figura~\ref{fig:hazfit} muestra el ajuste para la
-salida de laguna: el modelo reproduce tanto los niveles —que difieren por un
-factor de 3 entre tipos— como la caída con la duración y el máximo local en
-los 9--11 meses. El ordenamiento de niveles se invierte en los hazards de
+Con $K=3$, los hazards (2 sexos $\times$ 3 tipos $\times$ 2 estados
+$\times$ 3 macro-tramos de edad) provienen del paso M del EM en el óptimo:
+celdas agregadas duración$\times$edad ponderadas por las probabilidades
+posteriores de tipo. La Figura~\ref{fig:hazfit} muestra el ajuste para la
+salida de laguna: el modelo reproduce los niveles —que difieren por un
+factor de 3 entre tipos—, la caída con la duración —que continúa hasta las
+lagunas de 120+ meses— y el máximo local en los 9--11 meses. El ordenamiento de niveles se invierte en los hazards de
 término de cotización, confirmando que los tipos capturan dinámicas espejo y
 no solo niveles. La robustez por subperíodo indica estabilidad razonable:
 los hazards 2008--2023 son en promedio 6\% más altos (en logs, $+0{,}06$)
@@ -316,14 +365,14 @@ sobre tramos de edad con pesos muestrales.}
 
 La Figura~\ref{fig:perfiles} presenta los perfiles edad--ingreso anclados a
 2015--2023. Los efectos de período absorbieron un crecimiento común de
-3,1--3,7\% anual —superior al índice agregado de remuneraciones reales, lo
+2,7--4,0\% anual —superior al índice agregado de remuneraciones reales, lo
 que refleja composición del empleo formal— y que en el modelo de ciclo de
 vida entrará como el parámetro $g$. Las varianzas anuales (netas del efecto
-fijo individual) arrojan $\rho \in [0{,}50,\ 0{,}70]$ y
-$\sigma^2_\eta \in [0{,}04,\ 0{,}10]$ en los seis grupos. Un dividendo de la
+fijo individual) arrojan $\rho \in [0{,}50,\ 0{,}68]$ y
+$\sigma^2_\eta \in [0{,}05,\ 0{,}09]$ en los seis grupos. Un dividendo de la
 clasificación EM: bajo terciles, el grupo mujer--frágil era inestimable
-(6.242 persona--año y selección severa); con tipos EM reúne 28.257
-persona--año y sus parámetros son regulares ($\rho = 0{,}67$), eliminando la
+(6.242 persona--año y selección severa); con tipos EM reúne 16.380
+persona--año y sus parámetros son regulares ($\rho = 0{,}65$), eliminando la
 necesidad de agrupación ad hoc.
 
 \begin{figure}[htbp]
@@ -354,13 +403,17 @@ El proceso completo se simuló replicando la estructura exacta del panel
 (ventana observada, tipo y sexo de cada individuo; semilla fija). El Cuadro
 \ref{tab:valid} y la Figura~\ref{fig:validU} comparan momentos que la
 estimación nunca utilizó. La forma de U de las densidades individuales
-—el hecho estilizado central— emerge de la dinámica estimada. Los desajustes
-residuales son pequeños y de signo declarado: el modelo alarga levemente la
-cola de duración de lagunas (conservador: exagera el riesgo de laguna) y
-subpredice la cola de densidades altas en 2,6 puntos (0,139 vs.\ 0,165), un
-sesgo que \emph{no} es conservador para la aplicación de política —reduce
-los pensionados autofinanciados simulados— y que se tendrá presente al
-interpretar los resultados del modelo de ciclo de vida.
+—el hecho estilizado central— emerge de la dinámica estimada, y la
+distribución de duración de lagunas queda esencialmente clavada (media
+11,5 vs.\ 11,3 meses; p90 de 28 vs.\ 27). Los desajustes residuales son
+pequeños, simétricos y de signo declarado: ambas colas de la U quedan
+levemente subpredichas (cola baja 0,146 vs.\ 0,155; cola alta 0,148 vs.\
+0,165). La subpredicción de la cola alta —que reduce los pensionados
+autofinanciados simulados y por tanto \emph{no} es conservadora para la
+aplicación de política— era de 2,6 puntos porcentuales bajo la
+especificación truncada en $\bar D = 24$ y las duraciones extendidas la
+reducen a 1,7; se tendrá presente al interpretar los resultados del modelo
+de ciclo de vida.
 
 \begin{table}[htbp]
 \centering
@@ -370,15 +423,15 @@ interpretar los resultados del modelo de ciclo de vida.
 \toprule
  & Datos & Modelo \\
 \midrule
-Densidad media                          & 0,537 & 0,533 \\
-Densidad individual: p10                & 0,040 & 0,051 \\
-\quad p50                               & 0,563 & 0,549 \\
-\quad p90                               & 0,953 & 0,930 \\
-Share densidad $<$ 0,10                 & 0,155 & 0,148 \\
-Share densidad $>$ 0,90                 & 0,165 & 0,139 \\
+Densidad media                          & 0,537 & 0,537 \\
+Densidad individual: p10                & 0,040 & 0,055 \\
+\quad p50                               & 0,563 & 0,561 \\
+\quad p90                               & 0,953 & 0,937 \\
+Share densidad $<$ 0,10                 & 0,155 & 0,146 \\
+Share densidad $>$ 0,90                 & 0,165 & 0,148 \\
 Duración de lagunas: mediana (meses)    & 3     & 3     \\
-\quad media                             & 11,3  & 12,5  \\
-\quad p90                               & 27    & 31    \\
+\quad media                             & 11,3  & 11,5  \\
+\quad p90                               & 27    & 28    \\
 Episodios de laguna por individuo       & 7,6   & 7,4   \\
 \bottomrule
 \end{tabular}
@@ -406,12 +459,27 @@ dummies de duración lo absorben; no se modela estructuralmente.
 \item \textbf{Identificación duración vs.\ heterogeneidad residual.} Dentro
 de tipo puede persistir heterogeneidad; la lectura causal de $f^{sr}_k$ no es
 necesaria para nuestro propósito (simulación de trayectorias), pero sí lo es
-para interpretaciones estructurales, y así se declarará.
+para interpretaciones estructurales, y así se declarará. La huella
+cuantitativa de esa heterogeneidad residual es visible en los momentos
+prospectivos: \emph{toda} ley de primer orden en $(s,d)$ —incluidas las
+celdas saturadas— sobrepredice en 1 a 3 meses las cotizaciones efectivas a
+60 meses de quienes se observan en lagunas de duración media a edades
+jóvenes (selección dinámica: quien lleva dos años en laguna a los 27 tiene
+peor futuro del que su celda indica). La robustez con $K=4$ acota cuánto de
+esto absorbería un tipo adicional.
 \item \textbf{Edad de término.} El panel se censura en la solicitud de
 pensión o los 65 años; la extensión post-65 (relevante para el Fondo de
 Consolidación) requerirá supuestos adicionales.
-\item \textbf{Pendiente.} Elección final de $K$, $\bar D$ y la frecuencia
-del modelo de ciclo de vida (mensual vs.\ anual con proceso agregado).
+\item \textbf{Multimodalidad del EM.} La selección entre óptimos locales
+del mixture se resolvió por validación con momentos no utilizados (véase el
+Paso 1); la tipología femenina es sensible al óptimo elegido y la
+alternativa se reporta como robustez. Es una limitación conocida de los
+modelos de tipos discretos à la Heckman--Singer, aquí explícita en lugar de
+oculta tras una única inicialización.
+\item \textbf{Pendiente.} La frecuencia del modelo de ciclo de vida
+(mensual vs.\ anual con proceso agregado); $K$ y la estructura de duración
+quedaron fijados ($K=3$ por ICL y comparabilidad entre sexos; tramos de
+duración extendidos hasta 120+ meses con perfiles por macro-tramo de edad).
 \end{enumerate}
 
 \bibliographystyle{chicago}

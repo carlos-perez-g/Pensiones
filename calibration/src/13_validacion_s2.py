@@ -103,12 +103,16 @@ m_real, di_r, de_r = momentos(real_df, 'datos')
 del panel, real_df
 
 # ---- grillas S0 (24 x 9) y S2 (18 x 9) como arrays indexables
+# Tras la adopción (script 14) las grillas canónicas son S2; las S0
+# originales quedan con prefijo lambda_s0v1_. Usar esas si existen.
 lam0 = {}
 for g in ['M', 'F']:
     for k in LABELS:
         for s in [0, 1]:
-            lam0[(g, k, s)] = pd.read_csv(HZ0 / f'lambda_{g}_{k}_{s}.csv',
-                                          index_col=0).values
+            f = HZ0 / f'lambda_s0v1_{g}_{k}_{s}.csv'
+            if not f.exists():
+                f = HZ0 / f'lambda_{g}_{k}_{s}.csv'
+            lam0[(g, k, s)] = pd.read_csv(f, index_col=0).values[:DBAR0]
 lam2 = {}
 for g in ['M', 'F']:
     lamflat = em2[g]['lam']          # (3, 2*nD2*nA)
@@ -198,4 +202,32 @@ for ax, g, gl in [(axes[0], 'M', 'Hombres'), (axes[1], 'F', 'Mujeres')]:
     ax.set_ylim(0, 1); ax.legend()
 axes[0].set_ylabel('Densidad de cotización')
 fig.tight_layout(); fig.savefig(OUT / 'fig19_densidad_edad_s2.png', dpi=150)
+
+# ---- versión canónica (CANONICAL=1): fig12/fig13 y validacion_momentos.csv
+# con S2 como "el modelo" (reemplaza el rol del script 07 tras la adopción)
+if _os.environ.get('CANONICAL') == '1':
+    CO = BASE / 'output' / 'calibration'
+    pd.DataFrame([m_real, m_s2]).set_index('fuente').T.round(3).rename(
+        columns={'S2': 'simulado'}).to_csv(CO / 'validacion_momentos.csv')
+    fig, ax = plt.subplots(figsize=(8, 5))
+    ax.hist(di_r['dens'], bins=bins, alpha=0.55, label='Datos', density=True)
+    ax.hist(di_2['dens'], bins=bins, histtype='step', lw=2, color='C3',
+            label='Modelo simulado', density=True)
+    ax.set_xlabel('Densidad individual de cotización'); ax.set_ylabel('Densidad')
+    ax.legend()
+    ax.set_title('Validación: distribución de densidades (no targeted)')
+    fig.tight_layout(); fig.savefig(CO / 'fig12_validacion_U.png', dpi=150)
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey=True)
+    for ax, g, gl in [(axes[0], 'M', 'Hombres'), (axes[1], 'F', 'Mujeres')]:
+        r = de_r.xs(g, level='sexo').loc[20:64]
+        s_ = de_2.xs(g, level='sexo').loc[20:64]
+        ax.plot(r.index, r.values, label='Datos')
+        ax.plot(s_.index, s_.values, '--', label='Modelo')
+        ax.set_xlabel('Edad'); ax.set_title(f'Densidad por edad — {gl}')
+        ax.set_ylim(0, 1); ax.legend()
+    axes[0].set_ylabel('Densidad de cotización')
+    fig.tight_layout()
+    fig.savefig(CO / 'fig13_validacion_densidad_edad.png', dpi=150)
+    print('fig12/fig13 y validacion_momentos.csv canónicos actualizados.',
+          flush=True)
 print('\nLISTO.', flush=True)

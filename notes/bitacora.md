@@ -417,3 +417,39 @@ empeora la cola baja a 0,129 (por eso se descarta como canónico).
 3. Se mantienen pendientes de sesiones anteriores: mortalidad 2020, retornos
    por clase de activo (coautor), parámetros institucionales, test Anexo 1
    vs TDF, y todo P2.
+
+### Sesión 3 (cont.): adopción S2 ejecutada (mismo día)
+
+- **Script 14**: S2-warm promovido a canónico. Respaldos con sufijo _s0v1
+  (tipos_por_pid, pi_tipos, cond_iniciales, posteriores_tipos_{M,F},
+  lambda_s0v1_*). NUEVA CONVENCIÓN de grillas canónicas
+  lambda_{g}_{k}_{s}.csv: 240 filas (d=1..240, bins expandidos a frecuencia
+  mensual) x 9 tramos de edad; los consumidores indexan por min(d,240).
+  pi S2-warm — M: 0,337/0,180/0,484; F: 0,340/0,135/0,525
+  (frágil/intermitente/estable). fig8/fig9 regeneradas (eje log hasta 120+).
+- **Salarios re-estimados (06, sin cambios de código)**: los 6 grupos
+  regulares; ρ∈[0,50-0,68], σ²_η∈[0,047-0,091]; ρ de F-intermitente en la
+  cota inferior 0,5 (igual que antes); crecimiento de efectos de año
+  2,7-4,0%/año (F-frágil 4,0 sube el rango). Perfiles: cambios pequeños en
+  intermitente/estable (|Δlog|~0,03) y moderados en frágil (M 0,15; F 0,10)
+  por la reclasificación ~14% — esperable: frágil es el grupo con más
+  selección condicional a cotizar.
+- **Validación canónica**: script 13 con CANONICAL=1 regenera fig12/fig13 y
+  validacion_momentos.csv (datos vs S2). Script 07 queda superseded (asume
+  D̄=24); 13 lee los respaldos lambda_s0v1_* para la comparación S0.
+- **Tex actualizado a v2**: hecho estilizado 3 (la caída del hazard continúa
+  hasta 120+m; celda 120+ la más poblada a 50-65); bins extendidos y D̄=240
+  con la historia honesta del truncamiento anterior; ec. logit con
+  macro-tramos y h_{k,g} (errata corregida); Paso 1 con selección de K bajo
+  S2 (ICL: mínimo K=3 hombres; mujeres empate K=2/K=4, K=3 base) y párrafo
+  de multimodalidad + selección por validación; Paso 2 con el criterio
+  económico de especificación; Paso 4 con momentos prospectivos; resultados,
+  varianzas y tabla de validación con números S2; limitaciones ampliadas
+  (selección dinámica intra-tipo cuantificada, multimodalidad declarada).
+  PENDIENTE de compilar (sin LaTeX en el sandbox); compilar localmente
+  antes de circular.
+- Nota: data/hpa/_ccico_tope_cols.csv (97MB) es un extracto de 4 columnas
+  de ccico generado para acelerar el staging del 06 en la nube;
+  regenerable, se puede borrar.
+- Robustez subperíodo de hazards sigue basada en S0 (celdas gruesas);
+  re-verificación bajo bins extendidos queda como pendiente menor.
