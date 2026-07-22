@@ -532,3 +532,22 @@ empeora la cola baja a 0,129 (por eso se descarta como canónico).
   no serán consumidos por P2 (retiro a los 60 como base — decisión de
   diseño P2 pendiente). Declarado en tex: el corte en 60 es aproximación
   (anticipada pre-60 y hombres 60-64 tienen selección suave análoga).
+
+### Remuneraciones por tipo: lecturas finales de la sesión (2026-07-22)
+
+- **Corroboración fuera de muestra**: los salarios nunca entran en la
+  verosimilitud del EM y aun así los tipos ordenan niveles (I≈III altos,
+  II ~40% menor), varianza transitoria y estacionalidad. Añadido al tex
+  (subsección remuneraciones) y a ideas_glidepath.
+- **Emparejamientos cambiantes**: cada dimensión junta un par distinto de
+  tipos (reentrada: I+II vs III; duración empleo: II+III vs I; salarios:
+  I+III vs II) → tipología genuinamente tridimensional, sin ranking
+  unidimensional. Añadido al tex (sec. firmas).
+- **σ²_ε con trampa**: orden I<III<II tiene sentido económico en I vs II
+  (empleo estable paga estable: 0,0045 vs 0,0313 H); el mínimo del III
+  femenino (0,0021) es selección de participación, NO estabilidad —
+  advertencia explícita en el tex para no sobre-interpretar.
+- **Dos rutas al mismo aporte** (ya en ideas_glidepath): a los 40, flujos
+  esperados de cotización II≈III (H: 10,7/10,7; M: 6,3/6,2 UF/año) por
+  productos opuestos precio×cantidad. La suavidad del perfil del tipo I en
+  fig10 es precisión muestral (127k py) + menor σ²_ε real; distinguir ambas.

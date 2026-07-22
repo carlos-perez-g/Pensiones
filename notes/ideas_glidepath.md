@@ -108,6 +108,11 @@ duración) — datos y modelo (script 11/13, meses_futuros_60m.csv):
   cuesta cotizaciones, no salario de reentrada. Simplifica el estado del DP
   (no arrastrar capital humano deteriorado) y es un supuesto DECLARABLE con
   evidencia propia.
+- Tipos corroborados FUERA DE MUESTRA por los salarios: ningún salario
+  entró en la clasificación (el EM solo ve transiciones cotiza/no-cotiza) y
+  aun así la tipología ordena niveles, varianza transitoria y
+  estacionalidad salarial. Refuerza la credibilidad de la tipología como
+  estructura real (y no clustering ad hoc) frente a la SP y referees.
 - Robustez del P1 como activo de credibilidad: validación con momentos no
   utilizados (U, duraciones, densidad por edad, autocorrelación anual
   0,825 vs 0,842) — el comentario puede afirmar que su proceso de
