@@ -15,7 +15,7 @@
 
 \title{Un modelo estocástico de las cotizaciones previsionales chilenas\\
 \large Nota metodológica — borrador para discusión}
-\author{Carlos Pérez\thanks{Universidad Andrés Bello. Borrador; no citar.}}
+\author{Carlos Pérez G.\thanks{Universidad Andrés Bello. Borrador; no citar.}}
 \date{\today}
 
 \begin{document}
@@ -199,10 +199,11 @@ $z_{it}$ el componente persistente y
 $\varepsilon_{it}$ ruido transitorio (que incluye error de medición y
 fracción de mes trabajada):
 \begin{equation}
-z_{it} = \rho\, z_{i,t-1} + \eta_{it}, \qquad
-\eta_{it} \sim iid\,(0, \sigma^2_{\eta,k}), \qquad
-\varepsilon_{it} \sim iid\,(0, \sigma^2_{\varepsilon,k}).
+z_{it} = \rho_{k,g}\, z_{i,t-1} + \eta_{it}, \qquad
+\eta_{it} \sim iid\,(0, \sigma^2_{\eta,k,g}), \qquad
+\varepsilon_{it} \sim iid\,(0, \sigma^2_{\varepsilon,k,g}),
 \end{equation}
+con todos los parámetros del proceso específicos al tipo y al sexo.
 
 \begin{assumption}[Identificación edad--período--cohorte]
 \label{as:apc}
@@ -326,7 +327,7 @@ mismo pagador (pagos retroactivos que inflan el mes de entero): (i)
 $m_{k,g}(a)$ y $\zeta_{i}$ por regresión con efectos fijos individuales sobre
 splines de edad \emph{y efectos de año}, por tipo y sexo, bajo la
 normalización del Supuesto~\ref{as:apc}, con nivel anclado a 2015--2023;
-(ii) $\rho$, $\sigma^2_{\eta,k}$ y $\sigma^2_{\varepsilon,k}$ por GMM sobre
+(ii) $\rho_{k,g}$, $\sigma^2_{\eta,k,g}$ y $\sigma^2_{\varepsilon,k,g}$ por GMM sobre
 autocovarianzas de los residuos en frecuencia anual (promedio de meses
 cotizados del año), siguiendo la práctica estándar para separar componente
 persistente y transitorio. La censura por tope se trata por máxima
@@ -435,8 +436,16 @@ La Figura~\ref{fig:perfiles} presenta los perfiles edad--ingreso anclados a
 2,7--4,0\% anual —superior al índice agregado de remuneraciones reales, lo
 que refleja composición del empleo formal— y que en el modelo de ciclo de
 vida entrará como el parámetro $g$. Las varianzas anuales (netas del efecto
-fijo individual) arrojan $\rho \in [0{,}50,\ 0{,}68]$ y
-$\sigma^2_\eta \in [0{,}05,\ 0{,}09]$ en los seis grupos. Un dividendo de la
+fijo individual) arrojan $\rho_{k,g} \in [0{,}50,\ 0{,}68]$ y
+$\sigma^2_{\eta} \in [0{,}05,\ 0{,}09]$ en los seis grupos. La
+especificación AR(1) es consistente con los datos al horizonte observable:
+las razones de autocovarianzas sucesivas ($\hat c_2/\hat c_1$ y
+$\hat c_3/\hat c_2$) son aproximadamente iguales entre sí y al $\hat\rho$
+implícito en los seis grupos, como exige el decaimiento geométrico. La
+única estimación restringida es la del tipo II femenino, donde $\hat\rho$
+queda en la cota inferior impuesta de 0,5 (las razones de autocovarianzas
+sugieren $\rho \approx 0{,}45$; es el grupo con menos persona--año y mayor
+error de medición por promediar pocos meses cotizados). Un dividendo de la
 clasificación EM: bajo terciles, el grupo femenino del tipo III era inestimable
 (6.242 persona--año y selección severa); con tipos EM reúne 16.380
 persona--año y sus parámetros son regulares ($\rho = 0{,}65$), eliminando la
