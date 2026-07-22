@@ -494,3 +494,26 @@ empeora la cola baja a 0,129 (por eso se descarta como canónico).
   replica entre sexos con estimación completamente independiente (pi del
   tipo III: 0,337 vs 0,340), condicional a K=3; las diferencias por sexo
   cargan a severidad y repartición, no a existencia de los tipos.
+- Errata 3 corregida en Paso 3: el perfil m(a) es MCO sobre celdas edad×año
+  SIN efectos fijos (el tex decía FE; el FE solo se elimina en varianzas).
+  Diagnóstico del salto femenino 60+: transversal tipo III +0,56 log vs
+  within-person +0,09; supervivencia muestral post-60: 12/13/21% (III/II/I).
+  Selección por censura en solicitud (edad legal 60) + participación.
+  Tramo excluido del modelo (ya declarado).
+
+### Perfil salarial re-estimado con efectos fijos (2026-07-22, cierre sesión 3)
+
+- Script 06 v2: perfil m(a) en DOS ETAPAS — (A) efectos de año por MCO sobre
+  celdas edad×año (tendencia → período, Supuesto 2); (B) forma del perfil
+  within-person (FE) sobre logw − δ_año, dado δ. Implementa la decisión
+  original de sesión 2 que el código no cumplía (errata 3).
+- Motivación verificada: el salto femenino post-60 del corte transversal
+  (tipo III: +0,56 log entre 59 y 61) es composición — within-person +0,09;
+  supervivencia en la muestra salarial post-60: 12/13/21% (III/II/I).
+  Censura en solicitud (edad legal 60) + selección de participación.
+- Brecha FE vs transversal (20-59): 0,03-0,08 log; tipo III femenino 0,14.
+  Transversal guardado como referencia (perfiles_transversales_ref.csv).
+- Varianzas actualizadas: ρ ∈ [0,50-0,67] (F-III baja de 0,65 a 0,55);
+  σ²_η ∈ [0,06-0,09]; F-II sigue en la cota 0,5. Decaimiento geométrico se
+  mantiene (r21≈r32 en los seis grupos). Efectos de año idénticos (etapa A
+  sin cambios). Tex actualizado (Paso 3 y resultados); fig10 regenerada.

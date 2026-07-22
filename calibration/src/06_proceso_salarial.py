@@ -3,9 +3,12 @@ Paso 3 del modelo (notes/modelo_cotizaciones.tex): proceso de remuneraciones.
 
 Identificación bajo el Supuesto 2 (APC: tendencia -> período, cohorte = 0):
   log w_iy = m_{k,g}(a) + delta_y + zeta_i + z_iy + e_iy
-se estima por OLS ponderado de medias persona-año sobre dummies de edad y de
-año (sin cohorte no hay colinealidad). El nivel del perfil se ancla al
-promedio de los efectos de año 2015-2023.
+en dos etapas: (A) delta_y por OLS ponderado sobre celdas edad x año
+(tendencia común -> período); (B) la forma de m(a) por EFECTOS FIJOS
+individuales (within-person) sobre logw - delta_anio, dado delta — inmune a
+composición por niveles permanentes (v2, 2026-07-22; antes el perfil era el
+transversal de la etapa A). El nivel del perfil se ancla al promedio de los
+efectos de año 2015-2023.
 
 Muestra: meses cotizados, excluyendo (i) meses al tope imponible (flag
 administrativo), (ii) meses con subsidio de incapacidad, (iii) meses con
@@ -73,12 +76,20 @@ py = py[py['meses'] >= 6]
 py['edad'] = py['edad'].astype(int).clip(AGE_MIN, AGE_MAX)
 print(f'persona-año válidos: {len(py):,}', flush=True)
 
-# ---------------- OLS ponderado sobre celdas (edad x año), por (k,g)
+# ---------------- perfil edad-ingreso en dos etapas, por (k,g)
+# Etapa A (efectos de año): OLS ponderado sobre celdas edad x año — la
+#   tendencia común se atribuye a PERÍODO (Supuesto 2 del tex).
+# Etapa B (forma del perfil): dados los efectos de año, m(a) se estima
+#   DENTRO DE PERSONA (efectos fijos individuales, decisión bitácora sesión
+#   2, implementada 2026-07-22) sobre y* = logw - delta_anio. Esto inmuniza
+#   la forma del perfil a la composición por niveles permanentes (p.ej. la
+#   selección post-60 femenina, que en corte transversal salta +0,56 log
+#   mientras el within-person es +0,09).
 edades = np.arange(AGE_MIN, AGE_MAX + 1)
-perfiles, efectos, varianzas = {}, {}, []
+perfiles, perfiles_cs, efectos, varianzas = {}, {}, {}, []
 for g in ['M', 'F']:
     for k in ['bajo', 'medio', 'alto']:
-        d = py[(py['sexo'] == g) & (py['tipo'] == k)]
+        d = py[(py['sexo'] == g) & (py['tipo'] == k)].copy()
         cel = (d.groupby(['edad', 'anio'])
                .agg(y=('logw', 'mean'), w=('logw', 'size')).reset_index())
         anios = np.sort(cel['anio'].unique())
@@ -93,15 +104,38 @@ for g in ['M', 'F']:
         XtW = X.T * W
         beta = np.linalg.solve(XtW @ X + 1e-8 * np.eye(X.shape[1]),
                                XtW @ cel['y'].values)
-        alpha, delta = beta[:nA], np.r_[0, beta[nA:]]
-        # anclaje: nivel = promedio efectos de año en 2015-2023
+        alpha_cs, delta = beta[:nA], np.r_[0, beta[nA:]]
         m_anchor = (anios >= ANCHOR[0]) & (anios <= ANCHOR[1])
-        nivel = delta[m_anchor].mean()
-        perfiles[(g, k)] = alpha + nivel
+        nivel_anchor = delta[m_anchor].mean()
+        perfiles_cs[(g, k)] = alpha_cs + nivel_anchor     # transversal (ref.)
         efectos[(g, k)] = pd.Series(delta, index=anios)
 
+        # ------- etapa B: within-person dado delta
+        d['ystar'] = d['logw'].values - delta[np.searchsorted(anios,
+                                                              d['anio'].values)]
+        pid_codes, pid_idx = np.unique(d['pid'].values, return_inverse=True)
+        a_i = d['edad'].values - AGE_MIN
+        w_i = d['meses'].values.astype(float)
+        npid = len(pid_codes)
+        # sumas por persona y por persona x edad
+        sw = np.bincount(pid_idx, weights=w_i, minlength=npid)
+        sy = np.bincount(pid_idx, weights=w_i * d['ystar'].values,
+                         minlength=npid)
+        Wpa = np.zeros((npid, nA))
+        np.add.at(Wpa, (pid_idx, a_i), w_i)
+        # ecuaciones normales del estimador within (FWL):
+        XtWX = np.diag(np.bincount(a_i, weights=w_i, minlength=nA))
+        XtWX -= (Wpa / np.maximum(sw, 1e-12)[:, None]).T @ Wpa
+        XtWy = np.bincount(a_i, weights=w_i * d['ystar'].values, minlength=nA)
+        XtWy -= Wpa.T @ (sy / np.maximum(sw, 1e-12))
+        alpha_fe = np.linalg.solve(XtWX + 1e-6 * np.eye(nA), XtWy)
+        wA = np.bincount(a_i, weights=w_i, minlength=nA)
+        alpha_fe -= np.average(alpha_fe, weights=np.maximum(wA, 1e-12))
+        nivel = np.average(d['ystar'].values, weights=w_i) + nivel_anchor
+        perfiles[(g, k)] = alpha_fe + nivel
+
         # ------------- varianzas: residuos demeaned por persona
-        pred = alpha[ai] + delta[yi]
+        pred = alpha_fe[ai] + delta[yi]
         cel_res = dict(zip(zip(cel['edad'], cel['anio']), pred))
         d = d.copy()
         d['u'] = d['logw'] - [cel_res[(e, a)] for e, a in zip(d['edad'], d['anio'])]
@@ -132,6 +166,11 @@ print(vz.drop(columns=['cov2', 'cov3']).to_string(index=False), flush=True)
 pf = pd.DataFrame({f'{g}_{k}': perfiles[(g, k)] for g in ['M', 'F']
                    for k in ['bajo', 'medio', 'alto']}, index=edades)
 pf.round(4).to_csv(PROC / 'perfiles_salariales.csv')
+pcs = pd.DataFrame({f'{g}_{k}': perfiles_cs[(g, k)] for g in ['M', 'F']
+                    for k in ['bajo', 'medio', 'alto']}, index=edades)
+pcs.round(4).to_csv(OUT / 'perfiles_transversales_ref.csv')
+print('\nFE vs transversal: |delta log| medio (20-59) por grupo:', flush=True)
+print((pf - pcs).loc[:59].abs().mean().round(3).to_string(), flush=True)
 ef = pd.DataFrame(efectos)
 ef.round(4).to_csv(OUT / 'efectos_anio.csv')
 

@@ -212,7 +212,8 @@ La tendencia común del ingreso real se atribuye a efectos de período
 perfil de edad $m_{k,g}(\cdot)$ se identifica de la variación intra-individuo
 neta de efectos de tiempo; su nivel se ancla a los años recientes
 (2015--2023); y el crecimiento salarial real futuro se introduce en el modelo
-de ciclo de vida como un parámetro explícito $g$, sujeto a análisis de
+de ciclo de vida como un parámetro explícito $\mu_w$ (reservamos $g$ para
+el sexo), sujeto a análisis de
 sensibilidad (rango de referencia 1,25\%--2\% anual, consistente con las
 proyecciones oficiales).
 \end{assumption}
@@ -324,9 +325,24 @@ excluyendo observaciones en el tope (flag administrativo), los meses cuya
 remuneración incluye subsidios de incapacidad (la base de la licencia no es
 salario de mercado) y, como robustez, los meses con registros repetidos del
 mismo pagador (pagos retroactivos que inflan el mes de entero): (i)
-$m_{k,g}(a)$ y $\zeta_{i}$ por regresión con efectos fijos individuales sobre
-splines de edad \emph{y efectos de año}, por tipo y sexo, bajo la
-normalización del Supuesto~\ref{as:apc}, con nivel anclado a 2015--2023;
+$m_{k,g}(a)$ en dos etapas, por tipo y sexo. Etapa A: los efectos de año
+$\delta_t$ por MCO ponderado sobre celdas edad$\times$año (la tendencia
+común se atribuye a período, Supuesto~\ref{as:apc}). Etapa B: dada
+$\delta_t$, la \emph{forma} del perfil se estima con efectos fijos
+individuales —regresión within-person de $\log w - \delta_t$ sobre dummies
+de edad—, con el nivel anclado a 2015--2023. El paso within es esencial
+porque la composición por niveles permanentes contamina el perfil
+transversal donde la muestra se adelgaza por selección; el caso extremo es
+el tramo femenino sobre los 60 años (edad legal de pensión): el corte
+transversal del tipo III salta $+0{,}56$ log entre los 59 y los 61,
+mientras las mismas mujeres observadas a ambos lados de los 60 crecen solo
+$+0{,}09$ —composición pura, con apenas el 12\% de las cotizantes de
+58--59 sobreviviendo en la muestra salarial a los 61--62 (censura del panel
+en la solicitud de pensión más selección de participación)—. Con efectos
+fijos el perfil queda inmune a esa composición; el tramo 60+ femenino se
+excluye del modelo de todos modos. La brecha FE vs.\ transversal en el
+rango utilizado (20--59) es de 0,03--0,08 log en promedio, salvo el tipo
+III femenino (0,14);
 (ii) $\rho_{k,g}$, $\sigma^2_{\eta,k,g}$ y $\sigma^2_{\varepsilon,k,g}$ por GMM sobre
 autocovarianzas de los residuos en frecuencia anual (promedio de meses
 cotizados del año), siguiendo la práctica estándar para separar componente
@@ -450,9 +466,9 @@ La Figura~\ref{fig:perfiles} presenta los perfiles edad--ingreso anclados a
 2015--2023. Los efectos de período absorbieron un crecimiento común de
 2,7--4,0\% anual —superior al índice agregado de remuneraciones reales, lo
 que refleja composición del empleo formal— y que en el modelo de ciclo de
-vida entrará como el parámetro $g$. Las varianzas anuales (netas del efecto
-fijo individual) arrojan $\rho_{k,g} \in [0{,}50,\ 0{,}68]$ y
-$\sigma^2_{\eta} \in [0{,}05,\ 0{,}09]$ en los seis grupos. La
+vida entrará como el parámetro $\mu_w$. Las varianzas anuales (netas del efecto
+fijo individual) arrojan $\rho_{k,g} \in [0{,}50,\ 0{,}67]$ y
+$\sigma^2_{\eta} \in [0{,}06,\ 0{,}09]$ en los seis grupos. La
 especificación AR(1) es consistente con los datos al horizonte observable:
 las razones de autocovarianzas sucesivas ($\hat c_2/\hat c_1$ y
 $\hat c_3/\hat c_2$) son aproximadamente iguales entre sí y al $\hat\rho$
@@ -463,7 +479,7 @@ sugieren $\rho \approx 0{,}45$; es el grupo con menos persona--año y mayor
 error de medición por promediar pocos meses cotizados). Un dividendo de la
 clasificación EM: bajo terciles, el grupo femenino del tipo III era inestimable
 (6.242 persona--año y selección severa); con tipos EM reúne 16.380
-persona--año y sus parámetros son regulares ($\rho = 0{,}65$), eliminando la
+persona--año y sus parámetros son regulares ($\rho = 0{,}55$), eliminando la
 necesidad de agrupación ad hoc.
 
 \begin{figure}[htbp]
