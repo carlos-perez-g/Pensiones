@@ -490,3 +490,7 @@ empeora la cola baja a 0,129 (por eso se descarta como canónico).
   localmente (sin LaTeX en sandbox).
 - ideas_glidepath.md usa aún la etiqueta "frágil" en el cuerpo: léase
   tipo III (nota añadida al inicio).
+- Añadida al tex (sec. firmas) la observación de Carlos: la taxonomía se
+  replica entre sexos con estimación completamente independiente (pi del
+  tipo III: 0,337 vs 0,340), condicional a K=3; las diferencias por sexo
+  cargan a severidad y repartición, no a existencia de los tipos.
