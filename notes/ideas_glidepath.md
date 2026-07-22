@@ -128,6 +128,23 @@ duración) — datos y modelo (script 11/13, meses_futuros_60m.csv):
   bloques que pueden cortarse para siempre (III). Un glide path uniforme
   no puede distinguirlos; un optimizador no debería tratarlos igual.
 
+## 8. Diseño de retornos para "negar la mayor" (decidido conceptualmente 2026-07-22)
+
+- Para el comentario BASTA un proceso de retornos iid con momentos agregados
+  estándar (premio accionario 4-6% real, σ 16-20%; bono UF 2-3%, σ baja;
+  corr ~0-0,2), con sensibilidad en premio y γ. No es aproximación: es la
+  cancha del adversario — la literatura que genera los glide paths (CGM y
+  la práctica TDF) usa retornos iid; el de-risking viene del capital humano,
+  no de la dinámica de retornos (Merton sin ingreso laboral: participación
+  constante). Si con sus retornos y nuestras cotizaciones+PGU el óptimo no
+  es su glide path, la mayor queda negada sin depender de supuestos
+  financieros exóticos.
+- Desbloquea P2 de las series del coautor (pasan a refinamiento del paper).
+- Tener listos: (i) párrafo sobre reversión a la media (empuja a MÁS
+  acciones en horizonte largo; no rescata el de-risking a 55+ con piso
+  PGU); (ii) declaración de que bono iid ignora duración y precio de renta
+  vitalicia (estándar; para el paper).
+
 ## Cautelas (no sobre-argumentar)
 
 - Para deciles altos (sin PGU, alta densidad) la propuesta de la SP puede
