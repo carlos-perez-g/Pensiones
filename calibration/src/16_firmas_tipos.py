@@ -91,3 +91,29 @@ fig.suptitle('La firma de cada tipo: supervivencia de episodios de empleo y '
 fig.tight_layout()
 fig.savefig(OUT / 'fig21_firmas_tipos.png', dpi=150)
 print('LISTO: fig21_firmas_tipos.png', flush=True)
+
+# ---- fig21b: versión log-log (discusión 2026-07-22: primer orden = dicotomía
+# alto/bajo por estado; segundo orden = colas, donde vive el length-bias)
+fig, axes = plt.subplots(2, 2, figsize=(12, 8), sharex=True, sharey=True)
+for i, (g, gl) in enumerate([('M', 'Hombres'), ('F', 'Mujeres')]):
+    for j, (s, sl) in enumerate([(1, 'duración del EMPLEO'),
+                                 (0, 'duración de la LAGUNA')]):
+        ax = axes[i, j]
+        for k in LAB:
+            ax.plot(np.arange(1, H + 1), surv(g, k, s, 30), color=COL[k],
+                    label=DISPLAY[k])
+        ax.set_xscale('log'); ax.set_yscale('log'); ax.set_ylim(1e-3, 1)
+        ax.set_xticks([1, 3, 6, 12, 24, 60, 120, 240])
+        ax.set_xticklabels(['1', '3', '6', '12', '24', '60', '120', '240'])
+        ax.set_title(f'{gl} — {sl}', fontsize=10)
+        if j == 0:
+            ax.set_ylabel('P(episodio > d)  [escala log]')
+        if i == 1:
+            ax.set_xlabel('d (meses, escala log)')
+        if i == 0 and j == 0:
+            ax.legend(fontsize=8)
+fig.suptitle('fig21b: supervivencia de episodios en log-log (inicio a los 30)',
+             fontsize=11)
+fig.tight_layout()
+fig.savefig(OUT / 'fig21b_firmas_logy.png', dpi=150)
+print('LISTO: fig21b_firmas_logy.png', flush=True)
