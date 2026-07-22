@@ -333,3 +333,87 @@ bajo/medio/alto (mapa DISPLAY en scripts 06 y 09) para no romper el pipeline.
    imponible histórico, regla PGU (validar con pagos APS/PGU de la HPA).
 5. Actualizar notes/especificacion.md → hecho parcialmente; completar con P2.
 6. Test Anexo 1 vs glide paths TDF de la industria (para el comentario).
+
+---
+
+## 2026-07-22 — Sesión 3: efecto edad, re-especificación de hazards (S2) y EM re-estimado
+
+### Descriptivo P(laguna | edad) (script 10, fig15)
+
+- U por edad en el stock de lagunas en todos los grupos (mínimo 30-50, subida
+  desde ~55); niveles y pendientes muy distintos por tipo (mujer frágil: 0,61 a
+  los 30 → 0,94 a los 64; hombre estable plano en 0,15-0,21 entre 35 y 60).
+- El share frágil entre persona-meses observados SUBE con la edad (F: 0,38 a
+  los 20 → 0,54 a los 60): parte de la U agregada es composición.
+- Flujos: NO-paralelismo fuerte entre tipos en log-odds de reentrada (brecha
+  frágil−estable −1,0 a los 25 → −2,5/−3,0 a los 55+): lagunas del frágil
+  cuasi-absorbentes a edades altas.
+- **Corrección**: el tex escribe h^{sr}_g(a) pero la implementación (05 y
+  M-step del EM) estima edad POR TIPO: errata de notación, corregir a
+  h^{sr}_{k,g}(a). Lo que la especificación sí restringía era la aditividad
+  edad+duración dentro de celda.
+
+### Diagnósticos de especificación
+
+1. **D̄=24 insostenible**: hazard de reentrada sigue cayendo ~5x entre 24m y
+   120m+ de laguna a toda edad; a los 50-65 la celda 120+ es la MÁS poblada
+   (255k persona-meses). El "aplanamiento a 15-20m" era artefacto de mirar
+   d≤60 agregado.
+2. **Aditividad edad+duración**: falla concentrada en frágil × edades altas
+   (hasta 10 pp en S(60), prob. de seguir en laguna a 5 años). LR rechaza
+   todo con n=7,5M; el criterio pasó a ser económico (curvas S y E[meses
+   cotizados 60m] por celda).
+
+### Especificación S2 adoptada (script 11; ratificada por Carlos)
+
+Bins de duración extendidos {1..12, 13-18, 19-23, 24-35, 36-59, 60-119, 120+}
+y perfil de duración + intercepto por macro-tramo de edad {18-34, 35-49,
+50-65} (tramos quinquenales anidados como niveles), ambos estados. Deviance
+vs saturado: 11.007 (S0) → 4.508 (S1 solo bins) → 2.058 (S2). En E[meses
+cotizados 60m], S2 corta los errores de 5-11 meses de S0 en las celdas 55-59
+a 0,5-3. Nota honesta: S1 gana por poco el MAE agregado porque su rigidez
+compensa accidentalmente la selección dinámica intra-tipo en celdas jóvenes;
+se eligió la mejor ley condicional (S2) declarando la brecha. El overshoot
+residual (~1-3 meses, celdas jóvenes duración media, TODAS las specs incl.
+saturado) = heterogeneidad intra-tipo que ninguna ley (s,d) captura → motiva
+robustez K=4 y los momentos forward como validación estándar.
+
+### EM re-estimado con S2 (scripts 12, 12b) — multimodalidad
+
+- EM rápido en el sandbox (~10s/init); 12 inits por sexo.
+- **Multimodalidad real en mujeres**: el óptimo global (+64 loglik de 523k,
+  reproducible en 3 inits) REORGANIZA la tipología femenina: clase "estable"
+  de 62% contaminada (11% de sus miembros con densidad <0,10), frágil encoge
+  a 25%; acuerdo modal con tipología vigente 0,687. El basin del warm start
+  (continuo con la tipología vigente, acuerdo 0,861) queda 64 puntos abajo.
+- Selección de K bajo S2 (12b, K=2..5, 8 inits): ICL mínimo en K=3 para
+  HOMBRES (bajo S0 favorecía K=4 — punto a favor de S2); mujeres: ICL empata
+  K=2/K=4 (11 pts en 1,06M) con K=3 ~700 detrás, pero el K=4 solo agrega una
+  clase degenerada de 2,5%. Se mantiene K=3 ambos sexos (comparabilidad).
+- **Decisión (propuesta, pendiente ratificación)**: adoptar el BASIN WARM
+  como canónico y reportar el global como robustez. Justificación: selección
+  entre óptimos locales por momentos NO targeted (validación), no por
+  verosimilitud in-sample (diferencia 0,01%); el warm basin domina en TODOS
+  los momentos de validación y preserva la tipología (cascada mínima a
+  salarios).
+
+### Validación de la U (script 13, fig18/fig19; misma semilla y ventanas)
+
+Datos / S0 / S2-warm: densidad media 0,537/0,533/0,537; share<0,10
+0,155/0,148/0,146; share>0,90 0,165/0,139/0,148; lagunas media
+11,3/12,5/11,5; p90 27/31/28; episodios 7,6/7,4/7,4. S2 recupera un tercio
+de la subpredicción de la cola alta (el sesgo no conservador declarado en el
+tex) y clava la distribución de duración de lagunas. Ambas colas quedan
+levemente subpredichas (~1-2 pp), simétrico. El basin global en cambio
+empeora la cola baja a 0,129 (por eso se descarta como canónico).
+
+### Pendientes de la sesión
+
+1. Ratificar adopción canónica S2-warm; luego re-correr 06 (salarios) y 07
+   con tipos S2-warm (acuerdo 86% → impacto esperado menor) y un script 14
+   estilo 09 que promueva artefactos canónicos (respaldando los S0).
+2. Actualizar tex: errata h_{k,g}, D̄ y su justificación, criterio económico
+   de especificación, párrafo de multimodalidad del EM, tabla de validación.
+3. Se mantienen pendientes de sesiones anteriores: mortalidad 2020, retornos
+   por clase de activo (coautor), parámetros institucionales, test Anexo 1
+   vs TDF, y todo P2.
