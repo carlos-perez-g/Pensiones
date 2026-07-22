@@ -517,3 +517,9 @@ empeora la cola baja a 0,129 (por eso se descarta como canónico).
   σ²_η ∈ [0,06-0,09]; F-II sigue en la cota 0,5. Decaimiento geométrico se
   mantiene (r21≈r32 en los seis grupos). Efectos de año idénticos (etapa A
   sin cambios). Tex actualizado (Paso 3 y resultados); fig10 regenerada.
+- Test de pre-tendencias añadido al tex (Paso 3): supervivientes post-60 de
+  II/III venían con +0,22/+0,28 log (55→59) vs +0,08 de las que salen
+  (tipo I: 0,11 vs 0,08). La subida residual post-60 con FE = selección
+  sobre cambios (valor de opción de pensionarse); purgarla exigiría
+  endogenizar participación (fuera de alcance, Supuesto 1). Exclusión del
+  tramo 60+ femenino respaldada por ambos flancos.
